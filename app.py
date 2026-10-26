@@ -370,6 +370,18 @@ def login_required(view):
     return wrapped
 
 
+@app.before_request
+def check_login_user():
+    """쿠키 속 회원 번호가 DB의 같은 회원을 가리키는지 확인하고, 아니면 로그아웃시킨다.
+    (DB를 바꾸면 예전 쿠키의 번호가 다른 사람을 가리켜, 남의 이름으로 글이 써질 수 있다)"""
+    if "user_id" not in session or request.endpoint == "assets":
+        return
+    user = get_db().execute("SELECT userid FROM users WHERE id = ?", (session["user_id"],)).fetchone()
+    if user is None or user["userid"] != session.get("userid"):
+        session.clear()
+        flash("로그인 정보가 바뀌어 로그아웃되었습니다. 다시 로그인해 주세요.")
+
+
 @app.context_processor
 def inject_user():
     """모든 화면에서 로그인한 사람의 별명을 쓸 수 있게 한다."""
@@ -494,6 +506,7 @@ def login():
 
         session.clear()
         session["user_id"] = user["id"]
+        session["userid"] = user["userid"]       # check_login_user() 가 회원 번호와 함께 확인한다
         session["nickname"] = user["nickname"]
         flash(user["nickname"] + "님 반갑습니다.")
 
