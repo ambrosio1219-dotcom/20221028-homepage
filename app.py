@@ -18,7 +18,11 @@ from flask import (Flask, flash, g, redirect, render_template, request,
 from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "gallery.db")
+# Vercel 서버는 /tmp 에만 파일을 쓸 수 있다. 그곳의 DB는 서버가 다시 켜지면 비워진다.
+if os.environ.get("VERCEL"):
+    DB_PATH = "/tmp/gallery.db"
+else:
+    DB_PATH = os.path.join(BASE_DIR, "gallery.db")
 
 app = Flask(__name__)
 # 세션(로그인 상태)을 암호화하는 열쇠. 실제 서비스라면 외부에 노출하면 안 된다.
@@ -561,6 +565,8 @@ def comment_delete(comment_id):
     return redirect(url_for("post_view", post_id=comment["post_id"]))
 
 
+# 서버가 켜질 때 표를 준비한다 (Vercel 은 python app.py 로 켜지 않으므로 여기서 부른다)
+init_db()
+
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
