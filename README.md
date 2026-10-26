@@ -60,26 +60,27 @@ python app.py
 ## 폴더 구성
 
 ```
-midterm/
+20221028-homepage/
+├── css/style.css       전체 디자인
+├── js/main.js          화면 연출 (스크롤하면 나타나기, 헤더, 첫 화면 조명)
+├── js/map.js           지도 검색
+├── img/                탭 아이콘(favicon.svg), 전시 사진(guitars/)
+├── base.html           공통 틀 (머리말, 메뉴, 꼬리말, SNS)
+├── index.html          전시관 첫 화면
+├── detail.html         전시 상세
+├── map.html            지도
+├── board.html          방명록 목록
+├── post_view.html      글 보기 + 댓글
+├── post_form.html      글쓰기 / 수정
+├── login.html          로그인
+├── signup.html         회원가입
 ├── app.py              서버 프로그램 (주소별 처리, DB 만들기, 전시 자료)
-├── gallery.db          SQLite 데이터베이스 (실행하면 자동 생성)
 ├── requirements.txt    필요한 라이브러리
-├── templates/          화면 HTML
-│   ├── base.html       공통 틀 (머리말, 메뉴, 꼬리말, SNS)
-│   ├── index.html      전시관 첫 화면
-│   ├── detail.html     전시 상세
-│   ├── map.html        지도
-│   ├── board.html      방명록 목록
-│   ├── post_view.html  글 보기 + 댓글
-│   ├── post_form.html  글쓰기 / 수정
-│   ├── login.html      로그인
-│   └── signup.html     회원가입
-└── static/
-    ├── css/style.css   전체 디자인
-    ├── js/main.js      화면 연출 (스크롤하면 나타나기, 헤더, 첫 화면 조명)
-    ├── js/map.js       지도 검색
-    └── img/favicon.svg 탭 아이콘
+└── gallery.db          SQLite 데이터베이스 (실행하면 자동 생성, 깃에는 올리지 않음)
 ```
+
+HTML 파일은 Flask 기본값인 `templates/` 대신 맨 위에 두었습니다.
+그래서 `app.py`에서 화면 파일 위치를 맨 위로 지정하고, `css`·`js`·`img` 세 폴더만 주소로 열어 둡니다.
 
 ## 데이터베이스 구조
 

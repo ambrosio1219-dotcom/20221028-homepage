@@ -14,7 +14,7 @@ import sqlite3
 from functools import wraps
 
 from flask import (Flask, flash, g, redirect, render_template, request,
-                   session, url_for)
+                   send_from_directory, session, url_for)
 from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -24,9 +24,17 @@ if os.environ.get("VERCEL"):
 else:
     DB_PATH = os.path.join(BASE_DIR, "gallery.db")
 
-app = Flask(__name__)
+# 화면 파일(html)은 templates 폴더가 아니라 맨 위에 둔다.
+# static 폴더는 쓰지 않고, 아래 assets() 로 css·js·img 세 폴더만 주소로 열어 준다.
+app = Flask(__name__, template_folder=".", static_folder=None)
 # 세션(로그인 상태)을 암호화하는 열쇠. 실제 서비스라면 외부에 노출하면 안 된다.
 app.secret_key = "midterm-guitar-gallery-secret-key"
+
+
+# 맨 위 폴더를 통째로 열면 app.py 나 gallery.db 까지 내려받을 수 있으므로 세 폴더만 연다
+@app.route("/<any(css, js, img):folder>/<path:filename>")
+def assets(folder, filename):
+    return send_from_directory(os.path.join(BASE_DIR, folder), filename)
 
 
 # ------------------------------------------------------------------
@@ -106,7 +114,7 @@ def init_db():
 
 
 def _g(brand, n):
-    return "/static/img/guitars/%s-%d.jpg" % (brand, n)
+    return "/img/guitars/%s-%d.jpg" % (brand, n)
 
 
 # 전시할 기타 자료 (사진은 사용자가 준비한 뮤직포스 매장 사진을 잘라 쓴 것)
