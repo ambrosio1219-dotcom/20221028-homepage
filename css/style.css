@@ -410,22 +410,27 @@ h1, h2, h3 {
 }
 
 /* ---------- 첫 화면 ---------- */
+/* 무대처럼 화면 높이를 채우고, 글을 가운데에 세운 뒤 위에서 조명을 비춘다 */
 .hero {
     position: relative;
     isolation: isolate;
     overflow: hidden;
+    display: flex;
+    align-items: center;
     width: 100%;
-    padding: 96px 0 150px;
+    min-height: calc(100vh - 77px);      /* 77px: 헤더 높이 */
+    min-height: calc(100svh - 77px);
+    padding: 110px 0 170px;
 }
 
-/* 옅은 회색 벽에서 조명이 닿는 자리만 밝게 */
+/* 벽에서 천장 조명이 닿는 위쪽 가운데만 밝게 */
 .hero::before {
     content: "";
     position: absolute;
     inset: 0;
-    z-index: -2;
+    z-index: -3;
     background:
-        radial-gradient(ellipse 50% 75% at 74% 35%, var(--spot), transparent 70%),
+        radial-gradient(ellipse 40% 75% at 50% 0%, var(--spot), transparent 72%),
         linear-gradient(180deg, var(--wall-top), var(--wall-bottom));
 }
 
@@ -440,17 +445,78 @@ h1, h2, h3 {
 }
 
 .hero-inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 40px;
-    max-width: 1320px;
+    max-width: 980px;
+}
+
+/* 천장에서 제목 위로 내리꽂는 조명 줄기 */
+.hero-inner::before {
+    content: "";
+    position: absolute;
+    z-index: -2;
+    top: 0;
+    left: 50%;
+    width: 1200px;
+    height: 100%;
+    transform: translateX(-50%);
+    background: conic-gradient(from 158deg at 50% -6%, transparent 0deg, var(--beam) 22deg, transparent 44deg);
+    -webkit-mask-image: linear-gradient(180deg, #000 25%, transparent 92%);
+    mask-image: linear-gradient(180deg, #000 25%, transparent 92%);
+    pointer-events: none;
+}
+
+/* 조명이 바닥에 닿아 번진 자리 (밝은 화면에서는 옅은 그림자) */
+.hero-inner::after {
+    content: "";
+    position: absolute;
+    z-index: -2;
+    left: 50%;
+    bottom: 70px;
+    width: min(760px, 90%);
+    height: 110px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse at center, var(--floor), transparent 70%);
+    filter: blur(8px);
+    pointer-events: none;
+}
+
+.hero-text {
+    position: relative;
+}
+
+/* 제목 뒤에 아주 옅게 깔리는 속이 빈 글자 */
+.hero-text::before {
+    content: "GUITAR";
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -58%);
+    color: transparent;
+    font-size: clamp(140px, 24vw, 340px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    -webkit-text-stroke: 1px var(--line);
+    pointer-events: none;
+}
+
+/* 가운데 정렬이라 머리글 선을 양쪽에 둔다 */
+.hero .eyebrow.line::after {
+    content: "";
+    display: inline-block;
+    width: 42px;
+    height: 2px;
+    margin-left: 16px;
+    background-color: var(--point);
+    vertical-align: middle;
 }
 
 .hero h1 {
-    margin: 26px 0 28px;
-    font-size: clamp(40px, 5.6vw, 74px);
-    line-height: 1.22;
-    letter-spacing: -0.045em;
+    margin: 28px 0 30px;
+    font-size: clamp(44px, 7.2vw, 100px);
+    line-height: 1.12;
+    letter-spacing: -0.05em;
 }
 
 /* 작품 수만 조금 더 크게 */
@@ -464,8 +530,8 @@ h1, h2, h3 {
 }
 
 .hero .lead {
-    max-width: 540px;
-    margin: 0 auto 42px;
+    max-width: 600px;
+    margin: 0 auto 46px;
     color: var(--muted);
     font-size: 19px;
     line-height: 1.9;
@@ -517,125 +583,6 @@ h1, h2, h3 {
 .hero-text > :nth-child(3) { animation-delay: 0.24s; }
 .hero-text > :nth-child(4) { animation-delay: 0.36s; }
 .hero-text > :nth-child(5) { animation-delay: 0.48s; }
-
-/* 조명 아래 걸린 대표작 세 점 */
-.hero-visual {
-    position: relative;
-    height: 540px;
-}
-
-/* 위에서 내리꽂는 조명 줄기 (z-index -1: 글자 뒤로 깔리게) */
-.hero-visual::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    top: -260px;
-    left: 50%;
-    width: 760px;
-    height: 860px;
-    transform: translateX(-50%);
-    background: conic-gradient(from 158deg at 50% 0%, transparent 0deg, var(--beam) 22deg, transparent 44deg);
-    -webkit-mask-image: linear-gradient(180deg, #000 35%, transparent 92%);
-    mask-image: linear-gradient(180deg, #000 35%, transparent 92%);
-    pointer-events: none;
-}
-
-/* 바닥에 진 그림자 (어두운 화면에서는 바닥에 번진 빛) */
-.hero-visual::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: 6px;
-    width: 76%;
-    height: 70px;
-    transform: translateX(-50%);
-    background: radial-gradient(ellipse at center, var(--floor), transparent 70%);
-    filter: blur(6px);
-    pointer-events: none;
-}
-
-.frame {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    z-index: 2;
-    width: 290px;
-    aspect-ratio: 366 / 446;
-    padding: 10px;
-    background-color: var(--surface);
-    border: 1px solid var(--line);
-    box-shadow: 0 40px 70px -30px var(--shadow);
-    transition: transform 1s var(--ease), filter 0.8s, border-color 0.6s;
-    animation: frame-in 1.6s var(--ease) both;
-}
-
-.frame img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* 가운데 (첫 번째) */
-.frame:nth-child(1) {
-    z-index: 3;
-    transform: translate(-50%, -50%);
-    animation-delay: 0.3s;
-}
-
-/* 왼쪽 */
-.frame:nth-child(2) {
-    transform: translate(-118%, -47%) rotate(-6deg) scale(0.8);
-    filter: var(--photo-side);
-    animation-delay: 0.55s;
-}
-
-/* 오른쪽 */
-.frame:nth-child(3) {
-    transform: translate(18%, -47%) rotate(6deg) scale(0.8);
-    filter: var(--photo-side);
-    animation-delay: 0.7s;
-}
-
-.hero-visual:hover .frame:nth-child(2) {
-    transform: translate(-128%, -47%) rotate(-8deg) scale(0.82);
-}
-
-.hero-visual:hover .frame:nth-child(3) {
-    transform: translate(28%, -47%) rotate(8deg) scale(0.82);
-}
-
-.frame:hover {
-    filter: none;
-    border-color: var(--line-mid);
-}
-
-/* 전시물 옆에 붙는 작은 이름표 (가운데 작품만) */
-.plate {
-    position: absolute;
-    top: calc(100% + 20px);
-    left: 50%;
-    width: 110%;
-    transform: translateX(-50%);
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.6;
-    word-break: keep-all;
-}
-
-.plate b {
-    display: block;
-    margin-bottom: 2px;
-    color: var(--point);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-}
-
-.frame + .frame .plate {
-    display: none;
-}
 
 /* 아래로 내려가라는 표시 */
 .scroll-cue {
@@ -991,7 +938,7 @@ h1, h2, h3 {
 
 .js .reveal.is-in {
     opacity: 1;
-    translate: 0 0;
+    translate: none;    /* 0 0 이 아니라 none: 안쪽의 position: fixed 가 화면 기준으로 붙게 */
 }
 
 /* ---------- 전시 상세 ---------- */
@@ -1841,6 +1788,388 @@ input:-webkit-autofill {
     font-weight: 500;
 }
 
+/* ---------- 메인: 처음이라면 안내 카드 ---------- */
+.teaser {
+    padding: 120px 0 0;
+}
+
+.teaser h2 {
+    margin: 10px 0 14px;
+    font-size: 44px;
+}
+
+.teaser-lead {
+    max-width: 560px;
+    margin: 0 auto;
+    color: var(--muted);
+    word-break: keep-all;
+}
+
+.teaser-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+}
+
+.teaser-card {
+    display: block;
+    height: 100%;
+    padding: 34px 30px 30px;
+    background-color: var(--surface);
+    border: 1px solid var(--line);
+    text-align: left;
+    transition: transform 0.5s var(--ease), border-color 0.5s, box-shadow 0.5s;
+}
+
+.teaser-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--point);
+    box-shadow: 0 26px 50px -30px var(--shadow);
+}
+
+.teaser-card .num {
+    color: var(--dim);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+}
+
+.teaser-card h3 {
+    margin: 10px 0 8px;
+    font-size: 26px;
+}
+
+.teaser-card p {
+    color: var(--muted);
+    font-size: 17px;
+    word-break: keep-all;
+}
+
+.teaser-card .go {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 15px;
+    font-weight: 600;
+    border-bottom: 2px solid var(--point);
+}
+
+/* ---------- 기타 안내 페이지 ---------- */
+.guide-nav {
+    margin-top: 30px;
+    animation: rise 1s var(--ease) 0.3s both;
+}
+
+.guide-sec {
+    padding: 110px 0;
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: 80px;     /* 붙박이 헤더에 가리지 않게 */
+}
+
+.guide-sec:last-child {
+    border-bottom: none;
+}
+
+.guide-head h2 {
+    margin: 10px 0 14px;
+    font-size: 44px;
+}
+
+.guide-head .lead {
+    max-width: 660px;
+    margin: 0 auto;
+    color: var(--muted);
+    word-break: keep-all;
+}
+
+/* 기타 부위 그림 (guide.html 의 svg). 색은 위의 색 변수를 따른다 */
+.anatomy-wrap {
+    max-width: 1000px;
+    margin: 56px auto 0;
+    overflow-x: auto;
+}
+
+.anatomy {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.a-head,
+.a-body {
+    fill: var(--surface);
+    stroke: var(--text);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+}
+
+.a-board,
+.a-peg,
+.a-pickup,
+.a-dot {
+    fill: var(--text);
+}
+
+.a-fret {
+    stroke: var(--surface);
+    stroke-width: 1.6;
+    opacity: 0.75;
+}
+
+.a-inlay,
+.a-pole {
+    fill: var(--surface);
+}
+
+.a-nut,
+.a-post {
+    fill: var(--surface);
+    stroke: var(--text);
+    stroke-width: 1.5;
+}
+
+.a-bridge,
+.a-knob {
+    fill: var(--bg-soft);
+    stroke: var(--text);
+    stroke-width: 2;
+}
+
+.a-string {
+    stroke: #9a9a94;            /* 검은 지판과 흰 몸통 위에서 모두 보이는 중간 회색 */
+    stroke-width: 1.1;
+}
+
+.a-lever {
+    stroke: var(--text);
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.a-mark line {
+    stroke: var(--point);
+    stroke-width: 1.2;
+    stroke-dasharray: 4 4;
+}
+
+.a-mark circle {
+    fill: var(--point);
+}
+
+.a-mark text {
+    fill: var(--on-point);
+    font-family: var(--font);
+    font-size: 18px;
+    font-weight: 700;
+    text-anchor: middle;
+}
+
+.swipe-hint {
+    display: none;
+    margin-top: 8px;
+    color: var(--dim);
+    font-size: 14px;
+}
+
+.parts-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 56px;
+    list-style: none;
+    text-align: left;
+}
+
+.parts-list li {
+    display: flex;
+    gap: 16px;
+    padding: 22px 22px 20px;
+    background-color: var(--bg-soft);
+    border: 1px solid var(--line);
+}
+
+.parts-list .no {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: var(--point);
+    color: var(--on-point);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.parts-list h3 {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.parts-list h3 small {
+    margin-left: 6px;
+    color: var(--dim);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+.parts-list p {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.7;
+    word-break: keep-all;
+}
+
+/* 용어 풀이 */
+/* 카드 길이가 제각각이라 두 단으로 흘려 넣어 빈칸이 생기지 않게 한다 */
+.term-groups {
+    columns: 2;
+    column-gap: 22px;
+    margin-top: 56px;
+    text-align: left;
+}
+
+.term-group {
+    break-inside: avoid;
+    margin-bottom: 22px;
+    padding: 32px 32px 16px;
+    background-color: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--point);
+}
+
+.term-group h3 {
+    margin-bottom: 18px;
+    font-size: 22px;
+}
+
+.term-group dt {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.term-group dd {
+    margin: 2px 0 18px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.7;
+    word-break: keep-all;
+}
+
+/* 브랜드 이야기 (연표) */
+.timeline {
+    margin: 56px 0;
+    list-style: none;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+}
+
+.timeline li {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 24px;
+    padding: 26px 0;
+    border-top: 1px solid var(--line);
+}
+
+.timeline .year {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.timeline .brand {
+    color: var(--dim);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.timeline h3 {
+    margin: 2px 0 6px;
+    font-size: 22px;
+}
+
+.timeline .desc {
+    color: var(--muted);
+    font-size: 17px;
+    word-break: keep-all;
+}
+
+/* ---------- 상세: 용어 말풍선 (app.py 의 tips 필터가 붙인다) ---------- */
+.tip-hint {
+    margin-bottom: 36px;
+    padding: 12px 16px;
+    background-color: var(--bg-soft);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 15px;
+    text-align: left;
+    word-break: keep-all;
+}
+
+.tip-hint a {
+    color: var(--text);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.term {
+    position: relative;
+    border-bottom: 1.5px dashed var(--dim);
+    cursor: help;
+    outline: none;
+}
+
+.term:focus-visible {
+    background-color: var(--row-hover);
+}
+
+/* 말풍선은 용어의 왼쪽 끝에서 오른쪽으로 펼친다 (왼쪽 기둥의 글이 화면 밖으로 잘리지 않게) */
+.term::after {
+    content: attr(data-tip);
+    position: absolute;
+    z-index: 20;
+    left: 0;
+    bottom: calc(100% + 10px);
+    width: max-content;
+    max-width: 280px;
+    padding: 12px 16px;
+    background-color: var(--point);
+    color: var(--on-point);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0;
+    text-align: left;
+    white-space: normal;
+    word-break: keep-all;
+    box-shadow: 0 16px 30px -14px var(--shadow);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.25s, transform 0.25s var(--ease), visibility 0.25s;
+    pointer-events: none;
+}
+
+/* 오른쪽 기둥(사양표)은 반대로 오른쪽 끝에서 왼쪽으로 */
+.spec .term::after {
+    left: auto;
+    right: 0;
+}
+
+.term:hover::after,
+.term:focus::after {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+
 /* ---------- 움직임 ---------- */
 @keyframes rise {
     from { opacity: 0; translate: 0 26px; }
@@ -1896,55 +2225,14 @@ input:-webkit-autofill {
     }
 }
 
-@media screen and (min-width: 1000px) {
-    /* 첫 화면: 왼쪽 글, 오른쪽 작품 */
-    .hero {
-        padding: 110px 0 160px;
-    }
-
-    .hero-inner {
-        grid-template-columns: 1fr 1.05fr;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .hero-text {
-        text-align: left;
-    }
-
-    .hero .lead {
-        margin-left: 0;
-    }
-
-    .hero-btns,
-    .hero-meta {
-        justify-content: flex-start;
-    }
-
-    .hero-meta {
-        margin-left: -26px;
-    }
-}
-
 /* ---------- 중간 폭 ---------- */
 @media screen and (max-width: 1000px) {
-    /* 작품이 글 아래로 내려가므로 조명 자리도 아래로 */
-    .hero::before {
-        background:
-            radial-gradient(ellipse 80% 40% at 50% 74%, var(--spot), transparent 70%),
-            linear-gradient(180deg, var(--wall-top), var(--wall-bottom));
-    }
-
     .grid {
         grid-template-columns: repeat(3, 1fr);
     }
 
-    .hero-visual {
-        height: 480px;
-    }
-
-    .frame {
-        width: 250px;
+    .parts-list {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -1979,7 +2267,8 @@ input:-webkit-autofill {
     }
 
     .hero {
-        padding: 64px 0 130px;
+        min-height: calc(100svh - 150px);    /* 좁은 화면은 헤더가 두 줄이라 더 높다 */
+        padding: 80px 0 140px;
     }
 
     .hero h1 {
@@ -2003,13 +2292,63 @@ input:-webkit-autofill {
         font-size: 28px;
     }
 
-    .hero-visual {
-        height: 400px;
+    .teaser {
+        padding-top: 90px;
     }
 
-    .frame {
-        width: 190px;
-        padding: 7px;
+    .teaser h2,
+    .guide-head h2 {
+        font-size: 34px;
+    }
+
+    .teaser-grid,
+    .parts-list {
+        grid-template-columns: 1fr;
+    }
+
+    .term-groups {
+        columns: 1;
+    }
+
+    .guide-sec {
+        padding: 80px 0;
+    }
+
+    /* 기타 그림은 너무 작아지지 않게 최소 폭을 두고 옆으로 밀어서 본다 */
+    .anatomy {
+        min-width: 680px;
+    }
+
+    .swipe-hint {
+        display: block;
+    }
+
+    .term-group {
+        padding: 26px 22px 12px;
+    }
+
+    .timeline li {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+    /* 휴대폰에서는 용어 설명을 화면 아래 띠로 보여 준다 (말풍선이 화면 밖으로 잘리지 않게) */
+    .term::after,
+    .spec .term::after {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+        width: auto;
+        max-width: none;
+        transform: translateY(10px);
+    }
+
+    .term:hover::after,
+    .term:focus::after,
+    .spec .term:hover::after,
+    .spec .term:focus::after {
+        transform: none;
     }
 
     .page-head {

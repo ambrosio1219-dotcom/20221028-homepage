@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% block title %}기타 안내 · GUITAR GALLERY{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="inner">
+        <p class="eyebrow">Guide</p>
+        <h1>기타가 처음이라면</h1>
+        <p class="lead">기타의 생김새와 전시 설명에 자주 나오는 말, 세 회사가 걸어온 길을 정리했습니다.
+            먼저 읽고 전시를 보면 훨씬 많은 것이 보입니다.</p>
+        <nav class="filter guide-nav">
+            <a href="#parts">기타의 생김새</a>
+            <a href="#terms">용어 풀이</a>
+            <a href="#history">브랜드 이야기</a>
+        </nav>
+    </div>
+</section>
+
+<!-- 01. 기타의 생김새 -->
+<section class="guide-sec" id="parts">
+    <div class="inner">
+        <div class="guide-head reveal">
+            <p class="eyebrow">01 · Parts</p>
+            <h2>기타의 생김새</h2>
+            <p class="lead">전시된 기타는 모두 줄의 떨림을 픽업이 전기 신호로 바꾸는 일렉트릭 기타입니다.
+                그림의 번호를 따라 부위별 이름을 확인해 보세요.</p>
+        </div>
+
+        <!-- 기타 그림: 색은 CSS 변수를 따라가므로 다크 모드에서도 그대로 쓴다.
+             프렛 간격은 실제 기타처럼 반음 비율(2의 12제곱근)로 좁아진다. -->
+        <div class="anatomy-wrap reveal">
+            <svg class="anatomy" viewBox="0 0 1000 440" role="img" aria-labelledby="anatomy-title">
+                <title id="anatomy-title">일렉트릭 기타 부위 그림 (번호는 아래 설명과 같습니다)</title>
+
+                <!-- 줄감개 (헤드 뒤에 깔아서 가장자리 밖으로만 보이게) -->
+                <g class="a-peg">
+                    <rect x="64" y="174" width="12" height="20" rx="4"/>
+                    <rect x="94" y="179" width="12" height="20" rx="4"/>
+                    <rect x="124" y="188" width="12" height="20" rx="4"/>
+                    <rect x="64" y="232" width="12" height="20" rx="4"/>
+                    <rect x="94" y="242" width="12" height="20" rx="4"/>
+                    <rect x="124" y="247" width="12" height="20" rx="4"/>
+                </g>
+
+                <!-- 헤드 -->
+                <path class="a-head" d="M 182 210 L 140 206 C 100 190, 60 182, 40 192 C 26 200, 28 218, 44 226 C 70 240, 110 254, 140 254 L 182 250 Z"/>
+                <g class="a-post">
+                    <circle cx="70" cy="198" r="4"/><circle cx="100" cy="203" r="4"/><circle cx="130" cy="212" r="4"/>
+                    <circle cx="70" cy="228" r="4"/><circle cx="100" cy="238" r="4"/><circle cx="130" cy="243" r="4"/>
+                </g>
+                <g class="a-string">
+                    <line x1="183" y1="214.5" x2="70" y2="198"/><line x1="183" y1="220.7" x2="100" y2="203"/>
+                    <line x1="183" y1="226.9" x2="130" y2="212"/><line x1="183" y1="233.1" x2="70" y2="228"/>
+                    <line x1="183" y1="239.3" x2="100" y2="238"/><line x1="183" y1="245.5" x2="130" y2="243"/>
+                </g>
+
+                <!-- 지판과 프렛 -->
+                <rect class="a-board" x="186" y="212" width="466" height="36"/>
+                <g class="a-fret">
+                    <line x1="218.2" y1="212" x2="218.2" y2="248"/><line x1="254.2" y1="212" x2="254.2" y2="248"/>
+                    <line x1="288.2" y1="212" x2="288.2" y2="248"/><line x1="320.3" y1="212" x2="320.3" y2="248"/>
+                    <line x1="350.6" y1="212" x2="350.6" y2="248"/><line x1="379.2" y1="212" x2="379.2" y2="248"/>
+                    <line x1="406.2" y1="212" x2="406.2" y2="248"/><line x1="431.6" y1="212" x2="431.6" y2="248"/>
+                    <line x1="455.7" y1="212" x2="455.7" y2="248"/><line x1="478.4" y1="212" x2="478.4" y2="248"/>
+                    <line x1="499.8" y1="212" x2="499.8" y2="248"/><line x1="520" y1="212" x2="520" y2="248"/>
+                    <line x1="539.1" y1="212" x2="539.1" y2="248"/><line x1="557.1" y1="212" x2="557.1" y2="248"/>
+                    <line x1="574.1" y1="212" x2="574.1" y2="248"/><line x1="590.1" y1="212" x2="590.1" y2="248"/>
+                    <line x1="605.3" y1="212" x2="605.3" y2="248"/><line x1="619.6" y1="212" x2="619.6" y2="248"/>
+                    <line x1="633.1" y1="212" x2="633.1" y2="248"/><line x1="645.8" y1="212" x2="645.8" y2="248"/>
+                </g>
+                <g class="a-inlay">
+                    <circle cx="271.2" cy="230" r="3.5"/><circle cx="335.5" cy="230" r="3.5"/>
+                    <circle cx="392.7" cy="230" r="3.5"/><circle cx="443.7" cy="230" r="3.5"/>
+                    <circle cx="509.9" cy="223" r="3.5"/><circle cx="509.9" cy="237" r="3.5"/>
+                    <circle cx="565.6" cy="230" r="3.5"/><circle cx="597.7" cy="230" r="3.5"/>
+                </g>
+                <rect class="a-nut" x="180" y="209" width="6" height="42"/>
+
+                <!-- 바디 (넥 끝을 덮는다) -->
+                <path class="a-body" d="M 640 210 C 625 200, 600 170, 598 135 C 596 105, 625 92, 660 105 C 690 116, 720 98, 770 90 C 880 75, 950 140, 950 230 C 950 320, 880 385, 770 370 C 720 362, 690 350, 665 358 C 630 368, 605 350, 610 320 C 614 295, 628 262, 640 250 Z"/>
+
+                <!-- 픽업 두 개 -->
+                <rect class="a-pickup" x="698" y="205" width="32" height="50" rx="3"/>
+                <rect class="a-pickup" x="788" y="205" width="32" height="50" rx="3"/>
+                <g class="a-pole">
+                    <circle cx="714" cy="214.5" r="2.2"/><circle cx="714" cy="220.7" r="2.2"/><circle cx="714" cy="226.9" r="2.2"/>
+                    <circle cx="714" cy="233.1" r="2.2"/><circle cx="714" cy="239.3" r="2.2"/><circle cx="714" cy="245.5" r="2.2"/>
+                    <circle cx="804" cy="214.5" r="2.2"/><circle cx="804" cy="220.7" r="2.2"/><circle cx="804" cy="226.9" r="2.2"/>
+                    <circle cx="804" cy="233.1" r="2.2"/><circle cx="804" cy="239.3" r="2.2"/><circle cx="804" cy="245.5" r="2.2"/>
+                </g>
+
+                <!-- 브리지 -->
+                <rect class="a-bridge" x="850" y="207" width="26" height="46" rx="3"/>
+
+                <!-- 줄 여섯 가닥 (너트에서 브리지까지) -->
+                <g class="a-string">
+                    <line x1="183" y1="214.5" x2="863" y2="214.5"/><line x1="183" y1="220.7" x2="863" y2="220.7"/>
+                    <line x1="183" y1="226.9" x2="863" y2="226.9"/><line x1="183" y1="233.1" x2="863" y2="233.1"/>
+                    <line x1="183" y1="239.3" x2="863" y2="239.3"/><line x1="183" y1="245.5" x2="863" y2="245.5"/>
+                </g>
+
+                <!-- 픽업 셀렉터와 노브 -->
+                <line class="a-lever" x1="742" y1="128" x2="754" y2="114"/>
+                <circle class="a-knob" cx="742" cy="128" r="8"/>
+                <circle class="a-knob" cx="858" cy="314" r="13"/><circle class="a-dot" cx="858" cy="314" r="3"/>
+                <circle class="a-knob" cx="900" cy="294" r="13"/><circle class="a-dot" cx="900" cy="294" r="3"/>
+
+                <!-- 번호 표시 (아래 설명 목록과 같은 번호) -->
+                <g class="a-mark"><line x1="80" y1="40" x2="80" y2="190"/><circle cx="80" cy="40" r="18"/><text x="80" y="46">1</text></g>
+                <g class="a-mark"><line x1="130" y1="410" x2="130" y2="268"/><circle cx="130" cy="410" r="18"/><text x="130" y="416">2</text></g>
+                <g class="a-mark"><line x1="183" y1="40" x2="183" y2="209"/><circle cx="183" cy="40" r="18"/><text x="183" y="46">3</text></g>
+                <g class="a-mark"><line x1="300" y1="40" x2="300" y2="212"/><circle cx="300" cy="40" r="18"/><text x="300" y="46">4</text></g>
+                <g class="a-mark"><line x1="440" y1="410" x2="440" y2="248"/><circle cx="440" cy="410" r="18"/><text x="440" y="416">5</text></g>
+                <g class="a-mark"><line x1="560" y1="40" x2="560" y2="214"/><circle cx="560" cy="40" r="18"/><text x="560" y="46">6</text></g>
+                <g class="a-mark"><line x1="690" y1="40" x2="740" y2="121"/><circle cx="690" cy="40" r="18"/><text x="690" y="46">7</text></g>
+                <g class="a-mark"><line x1="804" y1="40" x2="804" y2="205"/><circle cx="804" cy="40" r="18"/><text x="804" y="46">8</text></g>
+                <g class="a-mark"><line x1="950" y1="40" x2="895" y2="135"/><circle cx="950" cy="40" r="18"/><text x="950" y="46">9</text></g>
+                <g class="a-mark"><line x1="863" y1="410" x2="863" y2="253"/><circle cx="863" cy="410" r="18"/><text x="863" y="416">10</text></g>
+                <g class="a-mark"><line x1="960" y1="410" x2="906" y2="305"/><circle cx="960" cy="410" r="18"/><text x="960" y="416">11</text></g>
+            </svg>
+        </div>
+        <p class="swipe-hint">← 그림을 옆으로 밀어서 볼 수 있습니다 →</p>
+
+        <ol class="parts-list">
+            {% for name, en, desc in parts %}
+            <li class="reveal" style="--d: {{ loop.index0 % 3 }}">
+                <span class="no">{{ loop.index }}</span>
+                <div>
+                    <h3>{{ name }} <small>{{ en }}</small></h3>
+                    <p>{{ desc }}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+</section>
+
+<!-- 02. 용어 풀이 -->
+<section class="guide-sec" id="terms">
+    <div class="inner">
+        <div class="guide-head reveal">
+            <p class="eyebrow">02 · Words</p>
+            <h2>용어 풀이</h2>
+            <p class="lead">전시 설명에 나오는 말을 묶어서 정리했습니다.
+                상세 페이지에서는 점선 밑줄이 있는 말을 누르면 바로 볼 수 있습니다.</p>
+        </div>
+
+        <div class="term-groups">
+            {% for group, terms in groups %}
+            <section class="term-group reveal" style="--d: {{ loop.index0 % 2 }}">
+                <h3>{{ group }}</h3>
+                <dl>
+                    {% for term, desc in terms %}
+                    <dt>{{ term }}</dt>
+                    <dd>{{ desc }}</dd>
+                    {% endfor %}
+                </dl>
+            </section>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 03. 브랜드 이야기 -->
+<section class="guide-sec" id="history">
+    <div class="inner narrow">
+        <div class="guide-head reveal">
+            <p class="eyebrow">03 · History</p>
+            <h2>브랜드 이야기</h2>
+            <p class="lead">전시실의 세 회사가 언제 어떤 기타를 내놓았는지 연도순으로 정리했습니다.</p>
+        </div>
+
+        <ol class="timeline">
+            {% for year, brand, title, desc in history %}
+            <li class="reveal">
+                <span class="year">{{ year }}</span>
+                <div>
+                    <p class="brand">{{ brand }}</p>
+                    <h3>{{ title }}</h3>
+                    <p class="desc">{{ desc }}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ol>
+
+        <a class="btn-fill big" href="{{ url_for('index') }}#gallery">전시 보러 가기</a>
+    </div>
+</section>
+{% endblock %}

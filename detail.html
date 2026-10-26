@@ -38,13 +38,17 @@
 
         <div class="detail-body">
             <section class="story reveal">
+                <!-- tips: 글 속 기타 용어에 누르면 설명이 뜨는 말풍선을 붙인다 (app.py) -->
+                <p class="tip-hint">점선 밑줄이 있는 말에 마우스를 올리거나 누르면 설명이 나옵니다.
+                    <a href="{{ url_for('guide') }}#terms">용어 모아 보기 →</a></p>
+
                 <h2>소개</h2>
-                <p>{{ item['summary'] }}</p>
+                <p>{{ item['summary']|tips }}</p>
 
                 <h2>이 기타의 특징</h2>
                 <ul class="features">
                     {% for f in features %}
-                        <li>{{ f }}</li>
+                        <li>{{ f|tips }}</li>
                     {% endfor %}
                 </ul>
             </section>
@@ -54,8 +58,8 @@
                 <table>
                     {% for row in specs %}
                     <tr>
-                        <th>{{ row[0] }}</th>
-                        <td>{{ row[1] }}</td>
+                        <th>{{ row[0]|tips }}</th>
+                        <td>{{ row[1]|tips }}</td>
                     </tr>
                     {% endfor %}
                 </table>

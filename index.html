@@ -21,16 +21,6 @@
                 <li><b>Free</b>Admission</li>
             </ul>
         </div>
-
-        <!-- 조명 아래 걸어 둔 대표작 세 점 (가운데가 첫 번째) -->
-        <div class="hero-visual">
-            {% for g in featured %}
-            <a class="frame" href="{{ url_for('guitar', guitar_id=g['id']) }}">
-                <img src="{{ g['image'] }}" alt="{{ g['brand'] }} {{ g['name'] }}">
-                <span class="plate"><b>{{ g['brand'] }}</b>{{ g['name'] }}</span>
-            </a>
-            {% endfor %}
-        </div>
     </div>
 
     <a class="scroll-cue" href="#gallery" aria-label="전시실로 내려가기">Scroll</a>
@@ -48,6 +38,44 @@
         {% endfor %}
     </div>
 </div>
+
+<!-- 처음 보는 사람을 위한 안내 (기타 안내 페이지의 세 부분으로 바로 간다) -->
+<section class="teaser">
+    <div class="inner">
+        <div class="reveal">
+            <p class="eyebrow">For Beginners</p>
+            <h2>기타가 처음이라면</h2>
+            <p class="teaser-lead">전시를 보기 전에 생김새와 낯선 말을 먼저 알아 두면 훨씬 재미있게 볼 수 있습니다.</p>
+        </div>
+        <!-- 카드 자체의 움직임(transform)과 겹치지 않게 떠오르기 연출은 바깥 칸에 준다 -->
+        <div class="teaser-grid">
+            <div class="reveal">
+                <a class="teaser-card" href="{{ url_for('guide') }}#parts">
+                    <span class="num">01</span>
+                    <h3>기타의 생김새</h3>
+                    <p>헤드부터 노브까지, 부위별 이름과 하는 일</p>
+                    <span class="go">보러 가기 →</span>
+                </a>
+            </div>
+            <div class="reveal" style="--d: 1">
+                <a class="teaser-card" href="{{ url_for('guide') }}#terms">
+                    <span class="num">02</span>
+                    <h3>용어 풀이</h3>
+                    <p>험버커, 마호가니, 선버스트… 낯선 말을 쉽게</p>
+                    <span class="go">보러 가기 →</span>
+                </a>
+            </div>
+            <div class="reveal" style="--d: 2">
+                <a class="teaser-card" href="{{ url_for('guide') }}#history">
+                    <span class="num">03</span>
+                    <h3>브랜드 이야기</h3>
+                    <p>1902년부터 이어진 세 회사의 역사</p>
+                    <span class="go">보러 가기 →</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
 <section class="gallery" id="gallery">
     <div class="inner">

@@ -31,6 +31,7 @@
 
             <nav class="gnb">
                 <a href="{{ url_for('index') }}" class="{% if ep in ['index', 'guitar'] %}on{% endif %}">전시관</a>
+                <a href="{{ url_for('guide') }}" class="{% if ep == 'guide' %}on{% endif %}">기타 안내</a>
                 <a href="{{ url_for('store_map') }}" class="{% if ep == 'store_map' %}on{% endif %}">전시 위치</a>
                 <a href="{{ url_for('board') }}" class="{% if ep in ['board', 'write', 'post_view', 'post_edit'] %}on{% endif %}">방명록</a>
             </nav>
