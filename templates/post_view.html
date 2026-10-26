@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}{{ post['title'] }} · 방명록{% endblock %}
+
+{% block content %}
+<section class="post-page">
+    <div class="inner narrow">
+        <article class="post">
+            <h1>{{ post['title'] }}</h1>
+            <p class="meta">
+                {{ post['nickname'] }} &nbsp;·&nbsp; {{ post['created'] }} &nbsp;·&nbsp; 조회 {{ post['views'] }}
+            </p>
+
+            <div class="post-body">{{ post['content'] }}</div>
+
+            <div class="post-btns">
+                <a class="btn-line" href="{{ url_for('board') }}">목록</a>
+                {% if session.get('user_id') == post['user_id'] %}
+                    <a class="btn-line" href="{{ url_for('post_edit', post_id=post['id']) }}">수정</a>
+                    <form method="post" action="{{ url_for('post_delete', post_id=post['id']) }}"
+                          onsubmit="return confirm('이 글을 지울까요?');">
+                        <button type="submit" class="btn-line danger">삭제</button>
+                    </form>
+                {% endif %}
+            </div>
+        </article>
+
+        <section class="comments">
+            <h2>댓글 {{ comments|length }}</h2>
+
+            {% for c in comments %}
+            <div class="comment">
+                <p class="meta">{{ c['nickname'] }} <span>{{ c['created'] }}</span></p>
+                <p class="text">{{ c['content'] }}</p>
+                {% if session.get('user_id') == c['user_id'] %}
+                <form method="post" action="{{ url_for('comment_delete', comment_id=c['id']) }}">
+                    <button type="submit" class="link-btn">삭제</button>
+                </form>
+                {% endif %}
+            </div>
+            {% else %}
+                <p class="empty">아직 댓글이 없습니다.</p>
+            {% endfor %}
+
+            {% if login_user %}
+            <form class="comment-form" method="post" action="{{ url_for('comment_write', post_id=post['id']) }}">
+                <textarea name="content" rows="3" placeholder="댓글을 입력하세요" required></textarea>
+                <button type="submit" class="btn-fill">댓글 등록</button>
+            </form>
+            {% else %}
+                <p class="login-ask">
+                    댓글을 쓰려면 <a href="{{ url_for('login') }}">로그인</a>해 주세요.
+                </p>
+            {% endif %}
+        </section>
+    </div>
+</section>
+{% endblock %}

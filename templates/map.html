@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}전시 위치 · GUITAR GALLERY{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="inner">
+        <p class="eyebrow">Location</p>
+        <h1>전시 위치</h1>
+        <p class="lead">전시 협조 매장인 뮤직포스를 기준으로 표시했습니다. 아래 검색창에 지역이나 상호를 넣으면 그 위치로 지도가 움직입니다.</p>
+    </div>
+</section>
+
+<section class="map-section">
+    <div class="inner">
+        <form class="map-search" id="map-form">
+            <input type="text" id="map-input" placeholder="지역이나 상호를 입력하세요 (예: 종로 악기상가)">
+            <button type="submit">검색</button>
+            <button type="button" id="map-reset">현위치(뮤직포스)</button>
+        </form>
+
+        <!-- 구글 지도 삽입: API 키 없이 q= 뒤의 검색어로 위치를 잡는다 -->
+        <iframe id="map-frame" class="map-frame"
+            src="https://www.google.com/maps?q=뮤직포스&z=15&hl=ko&output=embed"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+        <div class="map-info">
+            <div class="box">
+                <h3>지금 보고 있는 곳</h3>
+                <p id="map-current">뮤직포스 (전시 협조 매장)</p>
+                <p class="sub">
+                    <a id="naver-map" href="https://map.naver.com/v5/search/뮤직포스" target="_blank" rel="noopener">네이버 지도로 열기</a>
+                    &nbsp;·&nbsp;
+                    <a id="google-map" href="https://www.google.com/maps/search/뮤직포스" target="_blank" rel="noopener">구글 지도로 열기</a>
+                </p>
+            </div>
+
+            <div class="box">
+                <h3>관람 안내</h3>
+                <ul>
+                    <li>관람 시간 : 평일 11:00 ~ 20:00</li>
+                    <li>휴관 : 매주 월요일</li>
+                    <li>관람료 : 무료</li>
+                    <li>문의 : <a href="tel:010-1234-5678">010-1234-5678</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}방명록 · GUITAR GALLERY{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="inner">
+        <p class="eyebrow">Guest Book</p>
+        <h1>방명록</h1>
+        <p class="lead">전시를 보고 느낀 점, 좋아하는 기타 이야기를 남겨 주세요.</p>
+    </div>
+</section>
+
+<section class="board">
+    <div class="inner">
+        <div class="board-top">
+            <form class="board-search" method="get">
+                <input type="text" name="q" value="{{ keyword }}" placeholder="제목이나 내용 검색">
+                <button type="submit">검색</button>
+            </form>
+            <p class="count">전체 {{ total }}개</p>
+            <a class="btn-fill" href="{{ url_for('write') }}">글쓰기</a>
+        </div>
+
+        <table class="board-list">
+            <thead>
+                <tr>
+                    <th class="col-no">번호</th>
+                    <th class="col-title">제목</th>
+                    <th class="col-writer">글쓴이</th>
+                    <th class="col-date">날짜</th>
+                    <th class="col-views">조회</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in posts %}
+                <tr>
+                    <td class="col-no">{{ p['id'] }}</td>
+                    <td class="col-title">
+                        <a href="{{ url_for('post_view', post_id=p['id']) }}">{{ p['title'] }}</a>
+                        {% if p['comment_count'] %}
+                            <span class="cmt">[{{ p['comment_count'] }}]</span>
+                        {% endif %}
+                    </td>
+                    <td class="col-writer">{{ p['nickname'] }}</td>
+                    <td class="col-date">{{ p['created'][:10] }}</td>
+                    <td class="col-views">{{ p['views'] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="empty">
+                        {% if keyword %}검색 결과가 없습니다.{% else %}아직 글이 없습니다. 첫 글을 남겨 주세요.{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if last_page > 1 %}
+        <nav class="paging">
+            {% for n in range(1, last_page + 1) %}
+                <a href="{{ url_for('board', page=n, q=keyword) }}"
+                   class="{% if n == page %}on{% endif %}">{{ n }}</a>
+            {% endfor %}
+        </nav>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

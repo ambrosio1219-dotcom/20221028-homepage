@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{% if post %}글 수정{% else %}글쓰기{% endif %} · 방명록{% endblock %}
+
+{% block content %}
+<section class="post-page">
+    <div class="inner narrow">
+        <div class="form-card wide">
+            <p class="eyebrow">Guest Book</p>
+            <h1>{% if post %}글 수정{% else %}글쓰기{% endif %}</h1>
+
+            <form method="post">
+                <label for="title">제목</label>
+                <input type="text" id="title" name="title" value="{{ title }}" required autofocus>
+
+                <label for="content">내용</label>
+                <textarea id="content" name="content" rows="12" required>{{ content }}</textarea>
+
+                <div class="form-btns">
+                    <a class="btn-line" href="{% if post %}{{ url_for('post_view', post_id=post['id']) }}{% else %}{{ url_for('board') }}{% endif %}">취소</a>
+                    <button type="submit" class="btn-fill big">{% if post %}수정하기{% else %}등록하기{% endif %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

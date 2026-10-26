@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}GUITAR GALLERY · 전시관{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="inner hero-inner">
+        <div class="hero-text">
+            <p class="eyebrow line">Exhibition&nbsp;&nbsp;·&nbsp;&nbsp;2026</p>
+            <h1>세 공방이 만든<br><em>{{ total }}</em>대의 기타</h1>
+            <p class="lead">
+                PRS, Fender, Gibson. 같은 여섯 줄 악기를 서로 다른 방식으로 풀어낸 세 회사의 기타를
+                전시실별로 나누어 모았습니다. 나무의 결, 몸통의 생김새, 픽업 하나의 차이를 천천히 들여다보세요.
+            </p>
+            <div class="hero-btns">
+                <a class="btn-fill big" href="#gallery">전시 보기</a>
+                <a class="btn-line big" href="{{ url_for('store_map') }}">관람 안내</a>
+            </div>
+            <ul class="hero-meta">
+                <li><b>{{ total }}</b>Works</li>
+                <li><b>{{ categories|length - 1 }}</b>Rooms</li>
+                <li><b>Free</b>Admission</li>
+            </ul>
+        </div>
+
+        <!-- 조명 아래 걸어 둔 대표작 세 점 (가운데가 첫 번째) -->
+        <div class="hero-visual">
+            {% for g in featured %}
+            <a class="frame" href="{{ url_for('guitar', guitar_id=g['id']) }}">
+                <img src="{{ g['image'] }}" alt="{{ g['brand'] }} {{ g['name'] }}">
+                <span class="plate"><b>{{ g['brand'] }}</b>{{ g['name'] }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <a class="scroll-cue" href="#gallery" aria-label="전시실로 내려가기">Scroll</a>
+</section>
+
+<!-- 전시 작품 이름이 천천히 흘러가는 띠 (같은 줄을 두 번 이어 붙여 끊김 없이 돈다) -->
+<div class="marquee" aria-hidden="true">
+    <div class="track">
+        {% for _ in range(2) %}
+        <p>
+            {% for g in guitars %}
+                <span><i>{{ g['brand'] }}</i>{{ g['name'] }}</span>
+            {% endfor %}
+        </p>
+        {% endfor %}
+    </div>
+</div>
+
+<section class="gallery" id="gallery">
+    <div class="inner">
+        <div class="section-head reveal">
+            <p class="eyebrow">The Collection</p>
+            <h2>전시실</h2>
+            <div class="filter">
+                {% for c in categories %}
+                    <a href="{{ url_for('index', category=c) }}#gallery"
+                       class="{% if c == current %}on{% endif %}">{{ c }}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% set roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'] %}
+        {% for room in rooms %}
+        <div class="room">
+            <div class="room-head reveal">
+                <span class="room-numeral">{{ roman[loop.index0] if loop.index0 < 10 else loop.index }}</span>
+                <p class="room-no">Room {{ '%02d'|format(loop.index) }}&nbsp;&nbsp;·&nbsp;&nbsp;{{ room['items']|length }} Works</p>
+                <h3>{{ room.brand }}</h3>
+                <p class="room-intro">{{ room.intro }}</p>
+            </div>
+
+            <div class="grid">
+                {% for g in room["items"] %}
+                <div class="reveal" style="--d: {{ loop.index0 % 5 }}">
+                    <a class="card" href="{{ url_for('guitar', guitar_id=g['id']) }}">
+                        <div class="thumb">
+                            <img src="{{ g['image'] }}" alt="{{ g['brand'] }} {{ g['name'] }}" loading="lazy">
+                            <span class="no">No. {{ '%02d'|format(loop.index) }}</span>
+                            <span class="view">View</span>
+                        </div>
+                        <div class="info">
+                            <h4>{{ g['name'] }}</h4>
+                            <p class="tagline">{{ g['tagline'] }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+            <p class="empty">해당하는 전시물이 없습니다.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

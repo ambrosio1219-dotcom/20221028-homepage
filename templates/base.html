@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>{% block title %}GUITAR GALLERY{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- 자바스크립트가 켜져 있을 때만 '스크롤하면 나타나기' 연출을 쓴다 -->
+    <script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+    {% set ep = request.endpoint or '' %}
+    <header class="site-header">
+        <div class="inner">
+            <a class="logo" href="{{ url_for('index') }}">
+                GUITAR<span>Gallery</span>
+            </a>
+
+            <nav class="gnb">
+                <a href="{{ url_for('index') }}" class="{% if ep in ['index', 'guitar'] %}on{% endif %}">전시관</a>
+                <a href="{{ url_for('store_map') }}" class="{% if ep == 'store_map' %}on{% endif %}">전시 위치</a>
+                <a href="{{ url_for('board') }}" class="{% if ep in ['board', 'write', 'post_view', 'post_edit'] %}on{% endif %}">방명록</a>
+            </nav>
+
+            <div class="auth">
+                {% if login_user %}
+                    <span class="who">{{ login_user }} 님</span>
+                    <a class="btn-line" href="{{ url_for('logout') }}">로그아웃</a>
+                {% else %}
+                    <a class="btn-line" href="{{ url_for('login') }}">로그인</a>
+                    <a class="btn-fill" href="{{ url_for('signup') }}">회원가입</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-area">
+                {% for message in messages %}
+                    <p class="flash">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="inner">
+            <p class="foot-logo">GUITAR<span>Gallery</span></p>
+            <p class="foot-desc">기타 한 대 한 대의 생김새와 이야기를 전시합니다.</p>
+
+            <!-- SNS 링크 (아이콘 이미지는 simple-icons 제공) -->
+            <div class="sns">
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener" title="인스타그램">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@13/icons/instagram.svg" alt="인스타그램">
+                </a>
+                <a href="https://www.youtube.com/" target="_blank" rel="noopener" title="유튜브">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@13/icons/youtube.svg" alt="유튜브">
+                </a>
+                <a href="https://github.com/ambrosio1219-dotcom/android" target="_blank" rel="noopener" title="깃허브">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@13/icons/github.svg" alt="깃허브">
+                </a>
+                <a href="https://www.facebook.com/" target="_blank" rel="noopener" title="페이스북">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@13/icons/facebook.svg" alt="페이스북">
+                </a>
+                <a href="https://x.com/" target="_blank" rel="noopener" title="엑스">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@13/icons/x.svg" alt="엑스">
+                </a>
+                <a href="mailto:ambrosio1219@gmail.com" title="이메일">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@13/icons/gmail.svg" alt="이메일">
+                </a>
+            </div>
+
+            <p class="copy">&copy; 2026 Guitar Gallery · 중간고사 과제</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

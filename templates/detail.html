@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}{{ item['brand'] }} {{ item['name'] }} · GUITAR GALLERY{% endblock %}
+
+{% block content %}
+<article class="detail">
+    <div class="inner">
+        <p class="breadcrumb">
+            <a href="{{ url_for('index') }}">전시관</a> &nbsp;/&nbsp; {{ item['category'] }}
+        </p>
+
+        <!-- data-brand 글자는 뒤에 크게 깔리는 장식용 -->
+        <div class="detail-top" data-brand="{{ item['brand'] }}">
+            <div class="detail-photo reveal">
+                <img src="{{ item['image'] }}" alt="{{ item['brand'] }} {{ item['name'] }}">
+            </div>
+
+            <div class="detail-head reveal" style="--d: 1">
+                <p class="brand">{{ item['brand'] }}</p>
+                <h1>{{ item['name'] }}</h1>
+                <p class="tagline">{{ item['tagline'] }}</p>
+
+                <dl class="quick">
+                    <div>
+                        <dt>처음 나온 해</dt>
+                        <dd>{{ item['year'] }}년</dd>
+                    </div>
+                    <div>
+                        <dt>분류</dt>
+                        <dd>{{ item['category'] }}</dd>
+                    </div>
+                    <div>
+                        <dt>제작</dt>
+                        <dd>{{ item['brand'] }}</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+
+        <div class="detail-body">
+            <section class="story reveal">
+                <h2>소개</h2>
+                <p>{{ item['summary'] }}</p>
+
+                <h2>이 기타의 특징</h2>
+                <ul class="features">
+                    {% for f in features %}
+                        <li>{{ f }}</li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <aside class="spec reveal" style="--d: 1">
+                <h2>사양</h2>
+                <table>
+                    {% for row in specs %}
+                    <tr>
+                        <th>{{ row[0] }}</th>
+                        <td>{{ row[1] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </aside>
+        </div>
+
+        <nav class="pager">
+            {% if prev_item %}
+                <a class="prev" href="{{ url_for('guitar', guitar_id=prev_item['id']) }}">
+                    <span>이전 전시</span>{{ prev_item['name'] }}
+                </a>
+            {% else %}<span></span>{% endif %}
+
+            {% if next_item %}
+                <a class="next" href="{{ url_for('guitar', guitar_id=next_item['id']) }}">
+                    <span>다음 전시</span>{{ next_item['name'] }}
+                </a>
+            {% else %}<span></span>{% endif %}
+        </nav>
+    </div>
+</article>
+{% endblock %}

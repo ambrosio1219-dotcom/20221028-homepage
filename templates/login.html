@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}로그인 · GUITAR GALLERY{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <div class="form-card">
+        <p class="eyebrow">Login</p>
+        <h1>로그인</h1>
+        <p class="desc">방명록에 글을 남기려면 로그인이 필요합니다.</p>
+
+        <form method="post">
+            <label for="userid">아이디</label>
+            <input type="text" id="userid" name="userid" value="{{ userid }}" required autofocus>
+
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit" class="btn-fill big full">로그인</button>
+        </form>
+
+        <p class="form-foot">
+            아직 회원이 아니신가요? <a href="{{ url_for('signup') }}">회원가입</a>
+        </p>
+    </div>
+</section>
+{% endblock %}
