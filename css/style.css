@@ -1743,6 +1743,13 @@ input:-webkit-autofill {
     letter-spacing: 0.04em;
 }
 
+.footer-note {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+}
+
 /* ---------- 움직임 ---------- */
 @keyframes rise {
     from { opacity: 0; translate: 0 26px; }
