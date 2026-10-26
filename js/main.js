@@ -1,5 +1,20 @@
-// 화면 연출: 스크롤하면 하나씩 나타나기, 헤더 배경, 첫 화면 조명
+// 화면 연출: 스크롤하면 하나씩 나타나기, 헤더 배경, 첫 화면 조명, 다크 모드 버튼
 (function () {
+    // 0) 다크 모드 버튼: 누를 때마다 밝은/어두운 화면을 바꾸고, 다음 방문 때도 기억한다
+    var toggle = document.querySelector(".theme-toggle");
+    if (toggle) {
+        toggle.addEventListener("click", function () {
+            var root = document.documentElement;
+            var current = root.getAttribute("data-theme");
+            // 아직 고른 적이 없으면 기기 설정(밝게/어둡게)을 지금 상태로 본다
+            var isDark = current ? current === "dark"
+                                 : window.matchMedia("(prefers-color-scheme: dark)").matches;
+            var next = isDark ? "light" : "dark";
+            root.setAttribute("data-theme", next);
+            try { localStorage.setItem("theme", next); } catch (e) {}
+        });
+    }
+
     // 1) 화면에 들어온 요소를 천천히 떠오르게 한다
     var items = document.querySelectorAll(".reveal");
     if ("IntersectionObserver" in window) {

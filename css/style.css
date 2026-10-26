@@ -3,27 +3,122 @@
 /* ============================================================
    GUITAR GALLERY - 흰 벽에 조명을 비춘 듯한 전시관
    흰 바탕 + 검은 글씨, 색은 전시 사진에만
+   글꼴은 IBM Plex Sans KR 하나로 통일하고 굵기로만 강약을 준다
+   다크 모드: html 에 data-theme="dark" 가 붙거나, 기기 설정이 어두우면 아래 색으로 바뀐다
    ============================================================ */
 
 :root {
     --bg: #ffffff;
-    --bg-soft: #f5f5f3;
-    --bg-card: #ffffff;
-    --line: rgba(17, 17, 17, 0.1);
-    --line-mid: rgba(17, 17, 17, 0.22);
-    --line-strong: rgba(17, 17, 17, 0.5);
+    --bg-soft: #f4f4f1;
+    --surface: #ffffff;                 /* 카드, 입력칸, 액자 바탕 */
+    --line: rgba(17, 17, 17, 0.12);
+    --line-mid: rgba(17, 17, 17, 0.26);
     --text: #111111;
-    --muted: #6f6f6b;
-    --dim: #9b9b96;
+    --text-soft: rgba(17, 17, 17, 0.88);
+    --muted: #4d4d48;
+    --dim: #6b6b65;
     --point: #111111;
-    --point-hi: #000000;
-    --on-point: #ffffff;            /* 검은 바탕 위의 글씨 */
+    --on-point: #ffffff;                /* 포인트색 바탕 위의 글씨 */
     --point-glow: rgba(0, 0, 0, 0.08);
     --danger: #c0392b;
-    --display: "Cormorant Garamond", "Noto Serif KR", Georgia, serif;   /* 영문 장식 글씨 */
-    --serif: "Noto Serif KR", Georgia, serif;
-    --sans: "Noto Sans KR", "Malgun Gothic", sans-serif;
+    --header-bg: rgba(255, 255, 255, 0.75);
+    --header-bg-solid: rgba(255, 255, 255, 0.96);
+    --wall-top: #ececea;                /* 첫 화면 벽 */
+    --wall-bottom: #f6f6f4;
+    --spot: rgba(255, 255, 255, 1);     /* 조명이 닿는 자리 */
+    --spot-soft: rgba(255, 255, 255, 0.75);
+    --beam: rgba(255, 255, 255, 0.95);
+    --floor: rgba(0, 0, 0, 0.1);
+    --shadow: rgba(0, 0, 0, 0.3);
+    --stroke: rgba(17, 17, 17, 0.45);   /* 속이 빈 로마 숫자 테두리 */
+    --watermark: rgba(17, 17, 17, 0.045);
+    --chip: rgba(255, 255, 255, 0.92);
+    --row-hover: rgba(17, 17, 17, 0.03);
+    --photo: saturate(0.5);             /* 카드 사진 평소 */
+    --photo-on: saturate(1.05);         /* 카드 사진 마우스 올렸을 때 */
+    --photo-side: grayscale(1) contrast(0.85) brightness(1.06);
+    --photo-box: rgba(236, 236, 233, 0.6);
+    --icon: none;                       /* SNS 아이콘 (원본이 검은색) */
+    --grain: 0.035;
+    --font: "IBM Plex Sans KR", "Malgun Gothic", sans-serif;
     --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    color-scheme: light;
+}
+
+/* 다크 모드 색 (버튼으로 고른 경우) */
+:root[data-theme="dark"] {
+    --bg: #121110;
+    --bg-soft: #1a1917;
+    --surface: #1e1c1a;
+    --line: rgba(236, 230, 220, 0.12);
+    --line-mid: rgba(236, 230, 220, 0.26);
+    --text: #ece6dc;
+    --text-soft: rgba(236, 230, 220, 0.88);
+    --muted: #b9b2a6;
+    --dim: #948d82;
+    --point: #ece6dc;
+    --on-point: #121110;
+    --point-glow: rgba(236, 230, 220, 0.12);
+    --danger: #ef8a73;
+    --header-bg: rgba(18, 17, 16, 0.72);
+    --header-bg-solid: rgba(18, 17, 16, 0.95);
+    --wall-top: #0f0e0d;
+    --wall-bottom: #161513;
+    --spot: rgba(255, 228, 175, 0.12);
+    --spot-soft: rgba(255, 228, 175, 0.07);
+    --beam: rgba(255, 228, 175, 0.13);
+    --floor: rgba(255, 228, 175, 0.08);
+    --shadow: rgba(0, 0, 0, 0.85);
+    --stroke: rgba(236, 230, 220, 0.4);
+    --watermark: rgba(236, 230, 220, 0.04);
+    --chip: rgba(18, 17, 16, 0.85);
+    --row-hover: rgba(236, 230, 220, 0.035);
+    --photo: brightness(0.78) saturate(0.8);
+    --photo-on: brightness(1.02) saturate(1.05);
+    --photo-side: brightness(0.42) saturate(0.6);
+    --photo-box: rgba(30, 28, 26, 0.55);
+    --icon: invert(1);
+    --grain: 0.05;
+    color-scheme: dark;
+}
+
+/* 다크 모드 색 (버튼을 누른 적 없고, 기기 설정이 어두운 경우) */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg: #121110;
+        --bg-soft: #1a1917;
+        --surface: #1e1c1a;
+        --line: rgba(236, 230, 220, 0.12);
+        --line-mid: rgba(236, 230, 220, 0.26);
+        --text: #ece6dc;
+        --text-soft: rgba(236, 230, 220, 0.88);
+        --muted: #b9b2a6;
+        --dim: #948d82;
+        --point: #ece6dc;
+        --on-point: #121110;
+        --point-glow: rgba(236, 230, 220, 0.12);
+        --danger: #ef8a73;
+        --header-bg: rgba(18, 17, 16, 0.72);
+        --header-bg-solid: rgba(18, 17, 16, 0.95);
+        --wall-top: #0f0e0d;
+        --wall-bottom: #161513;
+        --spot: rgba(255, 228, 175, 0.12);
+        --spot-soft: rgba(255, 228, 175, 0.07);
+        --beam: rgba(255, 228, 175, 0.13);
+        --floor: rgba(255, 228, 175, 0.08);
+        --shadow: rgba(0, 0, 0, 0.85);
+        --stroke: rgba(236, 230, 220, 0.4);
+        --watermark: rgba(236, 230, 220, 0.04);
+        --chip: rgba(18, 17, 16, 0.85);
+        --row-hover: rgba(236, 230, 220, 0.035);
+        --photo: brightness(0.78) saturate(0.8);
+        --photo-on: brightness(1.02) saturate(1.05);
+        --photo-side: brightness(0.42) saturate(0.6);
+        --photo-box: rgba(30, 28, 26, 0.55);
+        --icon: invert(1);
+        --grain: 0.05;
+        color-scheme: dark;
+    }
 }
 
 * {
@@ -33,7 +128,6 @@
 }
 
 html {
-    color-scheme: light;
     scroll-behavior: smooth;
 }
 
@@ -41,10 +135,10 @@ body {
     position: relative;
     background-color: var(--bg);
     color: var(--text);
-    font-family: var(--sans);
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 1.9;
+    font-family: var(--font);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.85;
     letter-spacing: -0.01em;
     display: flex;
     flex-direction: column;
@@ -52,6 +146,7 @@ body {
     min-height: 100vh;
     text-align: center;          /* 전체를 가운데로 */
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.4s, color 0.4s;
 }
 
 /* 화면 전체에 종이 같은 옅은 입자를 깐다 */
@@ -61,13 +156,13 @@ body::after {
     inset: 0;
     z-index: 100;
     pointer-events: none;
-    opacity: 0.035;
+    opacity: var(--grain);
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
 ::selection {
-    background-color: #111111;
-    color: #ffffff;
+    background-color: var(--point);
+    color: var(--on-point);
 }
 
 :focus-visible {
@@ -97,18 +192,16 @@ a {
 }
 
 h1, h2, h3 {
-    font-family: var(--serif);
-    font-weight: 400;
-    line-height: 1.45;
-    letter-spacing: -0.02em;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: -0.03em;
 }
 
 .eyebrow {
     color: var(--point);
-    font-family: var(--display);
     font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.36em;
+    font-weight: 600;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
 }
 
@@ -117,7 +210,7 @@ h1, h2, h3 {
     content: "";
     display: inline-block;
     width: 42px;
-    height: 1px;
+    height: 2px;
     margin-right: 16px;
     background-color: var(--point);
     vertical-align: middle;
@@ -127,12 +220,12 @@ h1, h2, h3 {
 .btn-fill,
 .btn-line {
     display: inline-block;
-    padding: 11px 26px;
+    padding: 12px 28px;
     border-radius: 0;
-    font-family: var(--sans);
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0.06em;
+    font-family: var(--font);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
     cursor: pointer;
     transition: all 0.35s var(--ease);
 }
@@ -145,8 +238,7 @@ h1, h2, h3 {
 
 .btn-fill:hover {
     background-color: transparent;
-    color: var(--point-hi);
-    border-color: var(--point-hi);
+    color: var(--point);
     box-shadow: 0 0 28px var(--point-glow);
 }
 
@@ -158,7 +250,6 @@ h1, h2, h3 {
 
 .btn-line:hover {
     border-color: var(--point);
-    color: var(--point-hi);
 }
 
 .btn-line.danger:hover {
@@ -169,7 +260,7 @@ h1, h2, h3 {
 .btn-fill.big,
 .btn-line.big {
     padding: 16px 40px;
-    font-size: 15px;
+    font-size: 17px;
 }
 
 .btn-fill.full {
@@ -183,7 +274,7 @@ h1, h2, h3 {
     top: 0;
     z-index: 30;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.72);
+    background-color: var(--header-bg);
     border-bottom: 1px solid var(--line);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -192,8 +283,8 @@ h1, h2, h3 {
 
 /* 스크롤을 내리면 main.js 가 붙여 주는 이름 */
 .site-header.scrolled {
-    background-color: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 14px 40px -26px rgba(0, 0, 0, 0.25);
+    background-color: var(--header-bg-solid);
+    box-shadow: 0 14px 40px -26px var(--shadow);
 }
 
 .site-header .inner {
@@ -207,19 +298,17 @@ h1, h2, h3 {
 }
 
 .logo {
-    font-family: var(--display);
     font-size: 22px;
-    font-weight: 500;
-    letter-spacing: 0.3em;
+    font-weight: 700;
+    letter-spacing: 0.24em;
     line-height: 1.3;
 }
 
 .logo span {
     margin-left: 10px;
-    color: var(--point);
-    font-style: italic;
-    font-weight: 400;
-    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 0.08em;
 }
 
 .gnb {
@@ -232,8 +321,9 @@ h1, h2, h3 {
     position: relative;
     padding: 4px 0;
     color: var(--muted);
-    font-size: 14px;
-    letter-spacing: 0.08em;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
     transition: color 0.3s;
 }
 
@@ -243,7 +333,7 @@ h1, h2, h3 {
     left: 50%;
     bottom: 0;
     width: 0;
-    height: 1px;
+    height: 2px;
     background-color: var(--point);
     transition: all 0.35s var(--ease);
 }
@@ -268,13 +358,38 @@ h1, h2, h3 {
 
 .auth .btn-line,
 .auth .btn-fill {
-    padding: 7px 18px;
-    font-size: 13px;
+    padding: 8px 18px;
+    font-size: 15px;
 }
 
 .auth .who {
     color: var(--muted);
-    font-size: 13px;
+    font-size: 15px;
+}
+
+/* 다크 모드 버튼 (반쪽 칠한 동그라미) */
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid var(--line-mid);
+    border-radius: 50%;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.3s, transform 0.6s var(--ease);
+}
+
+.theme-toggle:hover {
+    border-color: var(--point);
+    transform: rotate(180deg);
+}
+
+.theme-toggle svg {
+    width: 18px;
+    height: 18px;
 }
 
 /* ---------- 알림 문구 ---------- */
@@ -286,11 +401,11 @@ h1, h2, h3 {
 }
 
 .flash {
-    padding: 13px 18px;
+    padding: 14px 18px;
     background-color: var(--bg-soft);
     border: 1px solid var(--line);
-    border-left: 2px solid var(--point);
-    font-size: 14px;
+    border-left: 3px solid var(--point);
+    font-size: 16px;
     animation: rise 0.8s var(--ease) both;
 }
 
@@ -303,15 +418,15 @@ h1, h2, h3 {
     padding: 96px 0 150px;
 }
 
-/* 옅은 회색 벽에서 조명이 닿는 자리만 하얗게 */
+/* 옅은 회색 벽에서 조명이 닿는 자리만 밝게 */
 .hero::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: -2;
     background:
-        radial-gradient(ellipse 50% 75% at 74% 35%, #ffffff, rgba(255, 255, 255, 0) 70%),
-        linear-gradient(180deg, #efefed, #f7f7f5);
+        radial-gradient(ellipse 50% 75% at 74% 35%, var(--spot), transparent 70%),
+        linear-gradient(180deg, var(--wall-top), var(--wall-bottom));
 }
 
 /* 마우스를 따라다니는 조명 (위치는 main.js 가 --mx, --my 로 넘겨 준다) */
@@ -321,7 +436,7 @@ h1, h2, h3 {
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 40%), rgba(255, 255, 255, 0.75), transparent 70%);
+    background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 40%), var(--spot-soft), transparent 70%);
 }
 
 .hero-inner {
@@ -333,29 +448,27 @@ h1, h2, h3 {
 
 .hero h1 {
     margin: 26px 0 28px;
-    font-size: clamp(38px, 5.4vw, 70px);
-    line-height: 1.28;
-    letter-spacing: -0.04em;
+    font-size: clamp(40px, 5.6vw, 74px);
+    line-height: 1.22;
+    letter-spacing: -0.045em;
 }
 
-/* 작품 수만 영문 기울임 숫자로 크게 */
+/* 작품 수만 조금 더 크게 */
 .hero h1 em {
-    padding-right: 0.06em;
-    color: var(--point-hi);
-    font-family: var(--display);
-    font-size: 1.32em;
-    font-style: italic;
-    font-weight: 300;
-    line-height: 0.8;
-    letter-spacing: 0;
+    padding-right: 0.04em;
+    color: var(--point);
+    font-size: 1.12em;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: -0.02em;
 }
 
 .hero .lead {
-    max-width: 520px;
+    max-width: 540px;
     margin: 0 auto 42px;
     color: var(--muted);
-    font-size: 16px;
-    line-height: 2;
+    font-size: 19px;
+    line-height: 1.9;
     word-break: keep-all;
 }
 
@@ -376,8 +489,9 @@ h1, h2, h3 {
 .hero-meta li {
     padding: 0 26px;
     color: var(--dim);
-    font-size: 11px;
-    letter-spacing: 0.28em;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
 }
 
@@ -388,10 +502,9 @@ h1, h2, h3 {
 .hero-meta b {
     display: block;
     color: var(--text);
-    font-family: var(--display);
-    font-size: 30px;
-    font-weight: 400;
-    letter-spacing: 0.02em;
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
     line-height: 1.3;
 }
 
@@ -421,13 +534,13 @@ h1, h2, h3 {
     width: 760px;
     height: 860px;
     transform: translateX(-50%);
-    background: conic-gradient(from 158deg at 50% 0%, transparent 0deg, rgba(255, 255, 255, 0.95) 22deg, transparent 44deg);
+    background: conic-gradient(from 158deg at 50% 0%, transparent 0deg, var(--beam) 22deg, transparent 44deg);
     -webkit-mask-image: linear-gradient(180deg, #000 35%, transparent 92%);
     mask-image: linear-gradient(180deg, #000 35%, transparent 92%);
     pointer-events: none;
 }
 
-/* 바닥에 진 그림자 */
+/* 바닥에 진 그림자 (어두운 화면에서는 바닥에 번진 빛) */
 .hero-visual::after {
     content: "";
     position: absolute;
@@ -436,7 +549,7 @@ h1, h2, h3 {
     width: 76%;
     height: 70px;
     transform: translateX(-50%);
-    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.1), transparent 70%);
+    background: radial-gradient(ellipse at center, var(--floor), transparent 70%);
     filter: blur(6px);
     pointer-events: none;
 }
@@ -449,9 +562,9 @@ h1, h2, h3 {
     width: 290px;
     aspect-ratio: 366 / 446;
     padding: 10px;
-    background-color: #ffffff;
-    border: 1px solid rgba(17, 17, 17, 0.1);
-    box-shadow: 0 40px 70px -30px rgba(0, 0, 0, 0.35);
+    background-color: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: 0 40px 70px -30px var(--shadow);
     transition: transform 1s var(--ease), filter 0.8s, border-color 0.6s;
     animation: frame-in 1.6s var(--ease) both;
 }
@@ -473,14 +586,14 @@ h1, h2, h3 {
 /* 왼쪽 */
 .frame:nth-child(2) {
     transform: translate(-118%, -47%) rotate(-6deg) scale(0.8);
-    filter: grayscale(1) contrast(0.85) brightness(1.06);
+    filter: var(--photo-side);
     animation-delay: 0.55s;
 }
 
 /* 오른쪽 */
 .frame:nth-child(3) {
     transform: translate(18%, -47%) rotate(6deg) scale(0.8);
-    filter: grayscale(1) contrast(0.85) brightness(1.06);
+    filter: var(--photo-side);
     animation-delay: 0.7s;
 }
 
@@ -494,7 +607,7 @@ h1, h2, h3 {
 
 .frame:hover {
     filter: none;
-    border-color: rgba(17, 17, 17, 0.35);
+    border-color: var(--line-mid);
 }
 
 /* 전시물 옆에 붙는 작은 이름표 (가운데 작품만) */
@@ -505,7 +618,7 @@ h1, h2, h3 {
     width: 110%;
     transform: translateX(-50%);
     color: var(--muted);
-    font-size: 12px;
+    font-size: 15px;
     line-height: 1.6;
     word-break: keep-all;
 }
@@ -514,10 +627,9 @@ h1, h2, h3 {
     display: block;
     margin-bottom: 2px;
     color: var(--point);
-    font-family: var(--display);
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.32em;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
 }
 
@@ -532,9 +644,9 @@ h1, h2, h3 {
     bottom: 26px;
     transform: translateX(-50%);
     color: var(--dim);
-    font-family: var(--display);
-    font-size: 11px;
-    letter-spacing: 0.4em;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     transition: color 0.3s;
 }
@@ -581,15 +693,14 @@ h1, h2, h3 {
     display: flex;
     align-items: center;
     color: var(--muted);
-    font-family: var(--serif);
-    font-size: 16px;
+    font-size: 18px;
     white-space: nowrap;
 }
 
 .marquee span::after {
     content: "";
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     margin: 0 36px;
     background-color: var(--point);
     opacity: 0.55;
@@ -598,9 +709,11 @@ h1, h2, h3 {
 
 .marquee i {
     margin-right: 12px;
-    color: var(--point);
-    font-family: var(--display);
-    font-size: 20px;
+    color: var(--text);
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 /* ---------- 페이지 머리말 ---------- */
@@ -612,7 +725,7 @@ h1, h2, h3 {
     border-bottom: 1px solid var(--line);
 }
 
-/* 위에서 아래로 옅어지는 회색 */
+/* 위에서 아래로 옅어지는 바탕 */
 .page-head::before {
     content: "";
     position: absolute;
@@ -623,7 +736,7 @@ h1, h2, h3 {
 
 .page-head h1 {
     margin: 16px 0 16px;
-    font-size: 44px;
+    font-size: 48px;
     animation: rise 1s var(--ease) 0.1s both;
 }
 
@@ -632,10 +745,10 @@ h1, h2, h3 {
 }
 
 .page-head .lead {
-    max-width: 620px;
+    max-width: 640px;
     margin: 0 auto;
     color: var(--muted);
-    font-size: 16px;
+    font-size: 19px;
     word-break: keep-all;
     animation: rise 1s var(--ease) 0.2s both;
 }
@@ -659,7 +772,7 @@ h1, h2, h3 {
 
 .section-head h2 {
     margin: 10px 0 26px;
-    font-size: 46px;
+    font-size: 52px;
 }
 
 .filter {
@@ -670,12 +783,12 @@ h1, h2, h3 {
 }
 
 .filter a {
-    padding: 7px 22px;
+    padding: 8px 24px;
     border: 1px solid var(--line-mid);
     border-radius: 999px;
     color: var(--muted);
-    font-size: 13px;
-    letter-spacing: 0.06em;
+    font-size: 16px;
+    font-weight: 500;
     transition: all 0.3s var(--ease);
 }
 
@@ -708,38 +821,34 @@ h1, h2, h3 {
     display: block;
     margin-bottom: 6px;
     color: transparent;
-    font-family: var(--display);
     font-size: 120px;
-    font-style: italic;
-    font-weight: 300;
-    line-height: 0.95;
-    -webkit-text-stroke: 1px rgba(17, 17, 17, 0.45);
+    font-weight: 700;
+    line-height: 1;
+    -webkit-text-stroke: 1.5px var(--stroke);
 }
 
 .room-no {
     color: var(--dim);
-    font-family: var(--display);
-    font-size: 13px;
-    letter-spacing: 0.32em;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
 }
 
 .room-head h3 {
     margin: 4px 0 14px;
-    padding-left: 0.22em;        /* 자간 때문에 오른쪽으로 쏠리는 것을 맞춘다 */
-    font-family: var(--display);
-    font-size: 48px;
-    font-weight: 500;
-    letter-spacing: 0.22em;
+    padding-left: 0.14em;        /* 자간 때문에 오른쪽으로 쏠리는 것을 맞춘다 */
+    font-size: 52px;
+    letter-spacing: 0.14em;
     line-height: 1.2;
     text-transform: uppercase;
 }
 
 .room-intro {
-    max-width: 560px;
+    max-width: 600px;
     margin: 0 auto;
     color: var(--muted);
-    font-size: 15px;
+    font-size: 18px;
     word-break: keep-all;
 }
 
@@ -763,7 +872,7 @@ h1, h2, h3 {
 .card {
     display: block;
     height: 100%;
-    background-color: var(--bg-card);
+    background-color: var(--surface);
     border: 1px solid var(--line);
     overflow: hidden;
     transition: transform 0.6s var(--ease), border-color 0.6s, box-shadow 0.6s;
@@ -772,7 +881,7 @@ h1, h2, h3 {
 .card:hover {
     transform: translateY(-8px);
     border-color: var(--point);
-    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 30px 60px -30px var(--shadow);
 }
 
 /* 사진은 모두 366x446 으로 잘라 두었으므로 같은 비율 칸에 꽉 채운다 */
@@ -789,12 +898,12 @@ h1, h2, h3 {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: saturate(0.5);
+    filter: var(--photo);
     transition: transform 1.2s var(--ease), filter 0.7s;
 }
 
 .card:hover .thumb img {
-    filter: saturate(1.05);
+    filter: var(--photo-on);
     transform: scale(1.06);
 }
 
@@ -802,7 +911,7 @@ h1, h2, h3 {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.55));
+    background: linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.6));
     opacity: 0;
     transition: opacity 0.6s;
     pointer-events: none;
@@ -815,14 +924,13 @@ h1, h2, h3 {
 .thumb .no {
     position: absolute;
     top: 10px;
-    left: 14px;
+    left: 12px;
     z-index: 1;
     padding: 0 8px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: var(--chip);
     color: var(--text);
-    font-family: var(--display);
     font-size: 14px;
-    font-style: italic;
+    font-weight: 600;
     letter-spacing: 0.04em;
 }
 
@@ -833,9 +941,9 @@ h1, h2, h3 {
     bottom: 14px;
     z-index: 1;
     color: #ffffff;
-    font-family: var(--display);
-    font-size: 12px;
-    letter-spacing: 0.42em;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     opacity: 0;
     transform: translateY(10px);
@@ -853,23 +961,18 @@ h1, h2, h3 {
 }
 
 .info h4 {
-    font-family: var(--serif);
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.55;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: -0.02em;
     word-break: keep-all;
-    transition: color 0.4s;
-}
-
-.card:hover .info h4 {
-    color: var(--point-hi);
 }
 
 .info .tagline {
-    margin-top: 5px;
+    margin-top: 6px;
     color: var(--muted);
-    font-size: 12.5px;
-    line-height: 1.65;
+    font-size: 15px;
+    line-height: 1.6;
     word-break: keep-all;
 }
 
@@ -901,8 +1004,7 @@ h1, h2, h3 {
 .breadcrumb {
     margin-bottom: 40px;
     color: var(--dim);
-    font-size: 13px;
-    letter-spacing: 0.06em;
+    font-size: 15px;
 }
 
 .breadcrumb a {
@@ -911,7 +1013,7 @@ h1, h2, h3 {
 }
 
 .breadcrumb a:hover {
-    color: var(--point-hi);
+    color: var(--text);
 }
 
 .detail-top {
@@ -932,13 +1034,11 @@ h1, h2, h3 {
     left: 50%;
     z-index: -1;
     transform: translate(-50%, -50%);
-    color: rgba(17, 17, 17, 0.045);
-    font-family: var(--display);
+    color: var(--watermark);
     font-size: clamp(120px, 22vw, 320px);
-    font-style: italic;
-    font-weight: 300;
+    font-weight: 700;
     line-height: 1;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
     white-space: nowrap;
     pointer-events: none;
@@ -948,8 +1048,8 @@ h1, h2, h3 {
 .detail-photo {
     padding: 48px 34px;
     background:
-        radial-gradient(ellipse 70% 55% at 50% 0%, #ffffff, rgba(255, 255, 255, 0) 72%),
-        rgba(238, 238, 236, 0.6);   /* 반투명이라 뒤의 브랜드 글자가 비친다 */
+        radial-gradient(ellipse 70% 55% at 50% 0%, var(--spot), transparent 72%),
+        var(--photo-box);       /* 반투명이라 뒤의 브랜드 글자가 비친다 */
     border: 1px solid var(--line);
 }
 
@@ -959,37 +1059,35 @@ h1, h2, h3 {
     max-width: 366px;
     height: auto;
     margin: 0 auto;
-    border: 1px solid rgba(17, 17, 17, 0.1);
-    box-shadow: 0 30px 60px -28px rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--line);
+    box-shadow: 0 30px 60px -28px var(--shadow);
 }
 
 .detail-head .brand {
     color: var(--point);
-    font-family: var(--display);
-    font-size: 20px;
-    font-style: italic;
-    letter-spacing: 0.18em;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
 }
 
 .detail-head h1 {
     margin: 10px 0 16px;
-    font-size: 44px;
-    line-height: 1.35;
+    font-size: 48px;
+    line-height: 1.3;
     word-break: keep-all;
 }
 
 .detail-head .tagline {
     color: var(--muted);
-    font-family: var(--serif);
-    font-size: 18px;
-    font-weight: 300;
+    font-size: 20px;
     word-break: keep-all;
 }
 
 .quick {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    max-width: 460px;
+    max-width: 480px;
     margin: 36px auto 0;
     padding-top: 28px;
     border-top: 1px solid var(--line);
@@ -1001,14 +1099,13 @@ h1, h2, h3 {
 
 .quick dt {
     color: var(--dim);
-    font-size: 12px;
-    letter-spacing: 0.08em;
+    font-size: 14px;
 }
 
 .quick dd {
     margin-top: 2px;
-    font-family: var(--serif);
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .detail-body {
@@ -1021,7 +1118,7 @@ h1, h2, h3 {
 .story h2,
 .spec h2 {
     margin-bottom: 20px;
-    font-size: 22px;
+    font-size: 26px;
 }
 
 .story h2::after,
@@ -1029,7 +1126,7 @@ h1, h2, h3 {
     content: "";
     display: block;
     width: 34px;
-    height: 1px;
+    height: 2px;
     margin: 14px auto 0;
     background-color: var(--point);
 }
@@ -1038,9 +1135,9 @@ h1, h2, h3 {
 .story p {
     max-width: 660px;
     margin: 0 auto 48px;
-    color: rgba(17, 17, 17, 0.86);
-    font-size: 17px;
-    line-height: 2.1;
+    color: var(--text-soft);
+    font-size: 19px;
+    line-height: 2;
     text-align: left;
     word-break: keep-all;
 }
@@ -1055,19 +1152,19 @@ h1, h2, h3 {
     position: relative;
     margin-bottom: 14px;
     padding-left: 28px;
-    font-size: 16px;
+    font-size: 18px;
     word-break: keep-all;
 }
 
 .features li::before {
     content: "";
     position: absolute;
-    top: 0.85em;
+    top: 0.8em;
     left: 2px;
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     background-color: var(--point);
-    opacity: 0.7;
+    opacity: 0.75;
     transform: rotate(45deg);
 }
 
@@ -1079,13 +1176,13 @@ h1, h2, h3 {
     padding: 32px 34px;
     background-color: var(--bg-soft);
     border: 1px solid var(--line);
-    border-top: 1px solid var(--point);
+    border-top: 2px solid var(--point);
 }
 
 .spec table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 15px;
+    font-size: 17px;
 }
 
 .spec th,
@@ -1097,9 +1194,9 @@ h1, h2, h3 {
 }
 
 .spec th {
-    width: 100px;
+    width: 120px;
     color: var(--muted);
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .spec tr:last-child th,
@@ -1116,8 +1213,8 @@ h1, h2, h3 {
 }
 
 .pager a {
-    font-family: var(--serif);
-    font-size: 19px;
+    font-size: 20px;
+    font-weight: 600;
     transition: opacity 0.3s;
 }
 
@@ -1128,10 +1225,10 @@ h1, h2, h3 {
 .pager a span {
     display: block;
     margin-bottom: 4px;
-    color: var(--point);
-    font-family: var(--sans);
-    font-size: 11px;
-    letter-spacing: 0.24em;
+    color: var(--dim);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
 }
 
 .pager .prev span::before {
@@ -1176,8 +1273,8 @@ h1, h2, h3 {
     border: 1px solid var(--point);
     color: var(--on-point);
     font-family: inherit;
-    font-size: 14px;
-    font-weight: 400;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s var(--ease);
 }
@@ -1190,7 +1287,7 @@ h1, h2, h3 {
 
 .map-search button:hover {
     background-color: transparent;
-    color: var(--point-hi);
+    color: var(--text);
     border-color: var(--point);
 }
 
@@ -1216,14 +1313,14 @@ h1, h2, h3 {
 
 .map-info h3 {
     margin-bottom: 14px;
-    font-size: 19px;
+    font-size: 22px;
 }
 
 .map-info h3::after {
     content: "";
     display: block;
     width: 26px;
-    height: 1px;
+    height: 2px;
     margin: 10px auto 0;
     background-color: var(--point);
 }
@@ -1235,22 +1332,21 @@ h1, h2, h3 {
 .map-info li {
     margin-bottom: 8px;
     color: var(--muted);
-    font-size: 15px;
+    font-size: 17px;
 }
 
 .map-info .sub {
     margin-top: 10px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .map-info a {
     color: var(--text);
     border-bottom: 1px solid var(--line-mid);
-    transition: all 0.3s;
+    transition: border-color 0.3s;
 }
 
 .map-info a:hover {
-    color: var(--point-hi);
     border-bottom-color: var(--point);
 }
 
@@ -1274,22 +1370,22 @@ h1, h2, h3 {
 .form-card {
     position: relative;
     width: 100%;
-    max-width: 440px;
+    max-width: 460px;
     padding: 50px 42px 42px;
-    background-color: #ffffff;
+    background-color: var(--surface);
     border: 1px solid var(--line);
-    box-shadow: 0 40px 80px -50px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 40px 80px -50px var(--shadow);
     animation: rise 1s var(--ease) both;
 }
 
-/* 카드 윗변 가운데의 검은 선 */
+/* 카드 윗변 가운데의 굵은 선 */
 .form-card::before {
     content: "";
     position: absolute;
     top: -1px;
     left: 50%;
     width: 80px;
-    height: 1px;
+    height: 2px;
     transform: translateX(-50%);
     background-color: var(--point);
 }
@@ -1300,13 +1396,13 @@ h1, h2, h3 {
 
 .form-card h1 {
     margin: 12px 0 10px;
-    font-size: 32px;
+    font-size: 34px;
 }
 
 .form-card .desc {
     margin-bottom: 32px;
     color: var(--muted);
-    font-size: 14px;
+    font-size: 16px;
     word-break: keep-all;
 }
 
@@ -1314,15 +1410,16 @@ label {
     display: block;
     margin-bottom: 8px;
     color: var(--muted);
-    font-size: 13px;
-    letter-spacing: 0.04em;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 label em {
     margin-left: 6px;
     color: var(--dim);
-    font-size: 12px;
+    font-size: 14px;
     font-style: normal;
+    font-weight: 400;
 }
 
 input[type="text"],
@@ -1331,13 +1428,13 @@ textarea {
     width: 100%;
     margin-bottom: 22px;
     padding: 13px 16px;
-    background-color: #ffffff;
+    background-color: var(--surface);
     border: 1px solid var(--line-mid);
     border-radius: 0;
     color: var(--text);
     font-family: inherit;
-    font-size: 15px;
-    font-weight: 300;
+    font-size: 17px;
+    font-weight: 400;
     text-align: center;
     outline: none;
     transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
@@ -1356,14 +1453,13 @@ textarea::placeholder {
 
 input:focus,
 textarea:focus {
-    background-color: #ffffff;
     border-color: var(--point);
     box-shadow: 0 0 0 3px var(--point-glow);
 }
 
 /* 브라우저 자동 완성의 파란 배경을 덮는다 */
 input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+    -webkit-box-shadow: 0 0 0 1000px var(--surface) inset;
     -webkit-text-fill-color: var(--text);
     caret-color: var(--text);
 }
@@ -1371,17 +1467,17 @@ input:-webkit-autofill {
 .form-foot {
     margin-top: 24px;
     color: var(--muted);
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .form-foot a {
     color: var(--text);
+    font-weight: 600;
     border-bottom: 1px solid var(--line-mid);
-    transition: all 0.3s;
+    transition: border-color 0.3s;
 }
 
 .form-foot a:hover {
-    color: var(--point-hi);
     border-bottom-color: var(--point);
 }
 
@@ -1411,7 +1507,7 @@ input:-webkit-autofill {
 }
 
 .board-search input {
-    width: 240px;
+    width: 260px;
     margin-bottom: 0;
     padding: 10px 14px;
 }
@@ -1422,26 +1518,26 @@ input:-webkit-autofill {
     border: 1px solid var(--line-mid);
     color: var(--text);
     font-family: inherit;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: border-color 0.3s;
 }
 
 .board-search button:hover {
     border-color: var(--point);
-    color: var(--point-hi);
 }
 
 .board-top .count {
     color: var(--muted);
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .board-list {
     width: 100%;
     border-collapse: collapse;
-    border-top: 1px solid var(--point);
-    font-size: 15px;
+    border-top: 2px solid var(--point);
+    font-size: 17px;
 }
 
 .board-list th,
@@ -1453,10 +1549,8 @@ input:-webkit-autofill {
 
 .board-list th {
     color: var(--dim);
-    font-family: var(--sans);
-    font-weight: 400;
-    font-size: 13px;
-    letter-spacing: 0.08em;
+    font-weight: 500;
+    font-size: 15px;
 }
 
 .board-list tbody tr {
@@ -1464,15 +1558,11 @@ input:-webkit-autofill {
 }
 
 .board-list tbody tr:hover {
-    background-color: rgba(17, 17, 17, 0.025);
+    background-color: var(--row-hover);
 }
 
 .board-list .col-title {
     text-align: left;
-}
-
-.board-list .col-title a {
-    transition: color 0.3s;
 }
 
 .board-list .col-title a:hover {
@@ -1482,8 +1572,9 @@ input:-webkit-autofill {
 
 .board-list .cmt {
     margin-left: 6px;
-    color: var(--point);
-    font-size: 13px;
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 600;
 }
 
 .board-list .col-no,
@@ -1493,11 +1584,11 @@ input:-webkit-autofill {
 }
 
 .board-list .col-writer {
-    width: 130px;
+    width: 140px;
 }
 
 .board-list .col-date {
-    width: 120px;
+    width: 130px;
     color: var(--muted);
 }
 
@@ -1514,11 +1605,11 @@ input:-webkit-autofill {
 }
 
 .paging a {
-    min-width: 38px;
+    min-width: 42px;
     padding: 8px 0;
     border: 1px solid var(--line-mid);
     color: var(--muted);
-    font-size: 14px;
+    font-size: 16px;
     transition: all 0.3s;
 }
 
@@ -1544,7 +1635,7 @@ input:-webkit-autofill {
 }
 
 .post h1 {
-    font-size: 32px;
+    font-size: 34px;
     word-break: keep-all;
 }
 
@@ -1553,16 +1644,16 @@ input:-webkit-autofill {
     padding-bottom: 20px;
     border-bottom: 1px solid var(--line);
     color: var(--muted);
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .post-body {
     min-height: 180px;
     max-width: 660px;
     margin: 0 auto;
-    color: rgba(17, 17, 17, 0.88);
-    font-size: 17px;
-    line-height: 2.05;
+    color: var(--text-soft);
+    font-size: 19px;
+    line-height: 2;
     text-align: left;
     white-space: pre-wrap;      /* 줄바꿈을 그대로 보여 준다 */
     word-break: break-word;
@@ -1585,7 +1676,7 @@ input:-webkit-autofill {
 
 .comments h2 {
     margin-bottom: 22px;
-    font-size: 20px;
+    font-size: 22px;
 }
 
 .comment {
@@ -1595,18 +1686,20 @@ input:-webkit-autofill {
 }
 
 .comment .meta {
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .comment .meta span {
     margin-left: 10px;
     color: var(--dim);
-    font-size: 13px;
+    font-size: 15px;
+    font-weight: 400;
 }
 
 .comment .text {
     margin-top: 4px;
-    color: rgba(17, 17, 17, 0.86);
+    color: var(--text-soft);
     white-space: pre-wrap;
 }
 
@@ -1621,7 +1714,7 @@ input:-webkit-autofill {
     border: none;
     color: var(--dim);
     font-family: inherit;
-    font-size: 13px;
+    font-size: 15px;
     cursor: pointer;
     transition: color 0.3s;
 }
@@ -1644,17 +1737,17 @@ input:-webkit-autofill {
     background-color: var(--bg-soft);
     border: 1px solid var(--line);
     color: var(--muted);
-    font-size: 15px;
+    font-size: 17px;
 }
 
 .login-ask a {
     color: var(--text);
+    font-weight: 600;
     border-bottom: 1px solid var(--line-mid);
-    transition: all 0.3s;
+    transition: border-color 0.3s;
 }
 
 .login-ask a:hover {
-    color: var(--point-hi);
     border-bottom-color: var(--point);
 }
 
@@ -1667,37 +1760,35 @@ input:-webkit-autofill {
     border-top: 1px solid var(--line);
 }
 
-/* 푸터 윗변 가운데의 검은 선 */
+/* 푸터 윗변 가운데의 선 */
 .site-footer::before {
     content: "";
     position: absolute;
     top: -1px;
     left: 50%;
     width: 120px;
-    height: 1px;
+    height: 2px;
     transform: translateX(-50%);
     background: linear-gradient(90deg, transparent, var(--point), transparent);
 }
 
 .foot-logo {
-    font-family: var(--display);
-    font-size: 26px;
-    font-weight: 500;
-    letter-spacing: 0.32em;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
 }
 
 .foot-logo span {
     margin-left: 10px;
-    color: var(--point);
-    font-style: italic;
-    font-weight: 400;
-    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 0.08em;
 }
 
 .foot-desc {
     margin-top: 10px;
     color: var(--muted);
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .sns {
@@ -1712,8 +1803,8 @@ input:-webkit-autofill {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
     background-color: transparent;
     border: 1px solid var(--line-mid);
     border-radius: 50%;
@@ -1727,9 +1818,10 @@ input:-webkit-autofill {
 }
 
 .sns img {
-    width: 18px;
-    height: 18px;
-    opacity: 0.6;               /* 아이콘 원본이 검은색이라 그대로 쓴다 */
+    width: 19px;
+    height: 19px;
+    filter: var(--icon);        /* 아이콘 원본이 검은색이라 어두운 화면에서만 뒤집는다 */
+    opacity: 0.65;
     transition: opacity 0.3s;
 }
 
@@ -1739,15 +1831,14 @@ input:-webkit-autofill {
 
 .copy {
     color: var(--dim);
-    font-size: 12px;
-    letter-spacing: 0.04em;
+    font-size: 14px;
 }
 
 .footer-note {
     margin-top: 6px;
     color: var(--muted);
-    font-size: 13px;
-    letter-spacing: 0.04em;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 /* ---------- 움직임 ---------- */
@@ -1778,8 +1869,8 @@ input:-webkit-autofill {
     .site-header .inner {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
-        padding-top: 20px;
-        padding-bottom: 20px;
+        padding-top: 18px;
+        padding-bottom: 18px;
     }
 
     .logo {
@@ -1840,8 +1931,8 @@ input:-webkit-autofill {
     /* 작품이 글 아래로 내려가므로 조명 자리도 아래로 */
     .hero::before {
         background:
-            radial-gradient(ellipse 80% 40% at 50% 74%, #ffffff, rgba(255, 255, 255, 0) 70%),
-            linear-gradient(180deg, #efefed, #f7f7f5);
+            radial-gradient(ellipse 80% 40% at 50% 74%, var(--spot), transparent 70%),
+            linear-gradient(180deg, var(--wall-top), var(--wall-bottom));
     }
 
     .grid {
@@ -1859,6 +1950,10 @@ input:-webkit-autofill {
 
 /* ---------- 좁은 화면 ---------- */
 @media screen and (max-width: 760px) {
+    body {
+        font-size: 17px;
+    }
+
     .inner {
         padding: 0 20px;
     }
@@ -1870,12 +1965,17 @@ input:-webkit-autofill {
     }
 
     .logo {
-        font-size: 19px;
+        font-size: 20px;
     }
 
     .gnb {
         flex-wrap: wrap;
         gap: 24px;
+    }
+
+    .theme-toggle {
+        width: 38px;
+        height: 38px;
     }
 
     .hero {
@@ -1887,7 +1987,7 @@ input:-webkit-autofill {
     }
 
     .hero .lead {
-        font-size: 15px;
+        font-size: 17px;
     }
 
     .hero-meta {
@@ -1895,13 +1995,12 @@ input:-webkit-autofill {
     }
 
     .hero-meta li {
-        padding: 0 16px;
-        font-size: 10px;
-        letter-spacing: 0.2em;
+        padding: 0 14px;
+        letter-spacing: 0.06em;
     }
 
     .hero-meta b {
-        font-size: 24px;
+        font-size: 28px;
     }
 
     .hero-visual {
@@ -1918,15 +2017,15 @@ input:-webkit-autofill {
     }
 
     .page-head h1 {
-        font-size: 30px;
+        font-size: 34px;
+    }
+
+    .page-head .lead {
+        font-size: 17px;
     }
 
     .marquee span {
-        font-size: 14px;
-    }
-
-    .marquee i {
-        font-size: 17px;
+        font-size: 16px;
     }
 
     .gallery {
@@ -1938,7 +2037,7 @@ input:-webkit-autofill {
     }
 
     .section-head h2 {
-        font-size: 34px;
+        font-size: 38px;
     }
 
     .room {
@@ -1950,7 +2049,11 @@ input:-webkit-autofill {
     }
 
     .room-head h3 {
-        font-size: 36px;
+        font-size: 38px;
+    }
+
+    .room-intro {
+        font-size: 17px;
     }
 
     .detail-photo {
@@ -1958,15 +2061,20 @@ input:-webkit-autofill {
     }
 
     .detail-head h1 {
-        font-size: 30px;
+        font-size: 32px;
     }
 
-    .quick dt {
-        font-size: 11px;
+    .detail-head .tagline {
+        font-size: 18px;
     }
 
     .quick dd {
-        font-size: 14px;
+        font-size: 16px;
+    }
+
+    .story p,
+    .post-body {
+        font-size: 18px;
     }
 
     .grid {
@@ -1976,6 +2084,14 @@ input:-webkit-autofill {
 
     .info {
         padding: 12px 8px 14px;
+    }
+
+    .info h4 {
+        font-size: 16px;
+    }
+
+    .info .tagline {
+        font-size: 14px;
     }
 
     .form-card {
@@ -1996,7 +2112,7 @@ input:-webkit-autofill {
     }
 
     .foot-logo {
-        font-size: 21px;
+        font-size: 20px;
     }
 }
 

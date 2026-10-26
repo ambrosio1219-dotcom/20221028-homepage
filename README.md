@@ -63,7 +63,7 @@ python app.py
 ```
 20221028-homepage/
 ├── css/style.css       전체 디자인
-├── js/main.js          화면 연출 (스크롤하면 나타나기, 헤더, 첫 화면 조명)
+├── js/main.js          화면 연출 (스크롤하면 나타나기, 헤더, 첫 화면 조명, 다크 모드 버튼)
 ├── js/map.js           지도 검색
 ├── img/                탭 아이콘(favicon.svg), 전시 사진(guitars/)
 ├── base.html           공통 틀 (머리말, 메뉴, 꼬리말, SNS)
@@ -98,5 +98,5 @@ HTML 파일은 Flask 기본값인 `templates/` 대신 맨 위에 두었습니다
 
 - 전시 사진은 위키미디어 공용(Wikimedia Commons)의 자유 이용 이미지입니다.
 - SNS 아이콘은 simple-icons(CC0)를 씁니다.
-- 글꼴은 구글 폰트의 Cormorant Garamond(영문 장식), Noto Serif KR, Noto Sans KR입니다.
+- 글꼴은 구글 폰트의 IBM Plex Sans KR 하나로 통일했습니다.
 - 사진과 글꼴, 아이콘을 불러오려면 **인터넷 연결이 필요합니다.**
