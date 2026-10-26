@@ -24,6 +24,11 @@ if os.environ.get("VERCEL"):
 else:
     DB_PATH = os.path.join(BASE_DIR, "gallery.db")
 
+# Vercel 에 연결한 Neon(Postgres) 주소. 이 값이 있으면 SQLite 대신 Postgres 를 쓴다.
+# Vercel 은 서버를 여러 대 띄우는데 /tmp 의 SQLite 는 서버마다 따로라서,
+# 글을 쓴 서버와 목록을 보여 주는 서버가 다르면 글이 사라진 것처럼 보였다.
+DATABASE_URL = os.environ.get("DATABASE_URL") or os.environ.get("POSTGRES_URL")
+
 # 화면 파일(html)은 templates 폴더가 아니라 맨 위에 둔다.
 # static 폴더는 쓰지 않고, 아래 assets() 로 css·js·img 세 폴더만 주소로 열어 준다.
 app = Flask(__name__, template_folder=".", static_folder=None)
@@ -40,11 +45,83 @@ def assets(folder, filename):
 # ------------------------------------------------------------------
 # 데이터베이스
 # ------------------------------------------------------------------
+class PgRow(dict):
+    """sqlite3.Row 처럼 row["이름"] 과 row[0] 둘 다 되게 한다."""
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            return list(self.values())[key]
+        return dict.__getitem__(self, key)
+
+
+def _pg_row_factory(cursor):
+    names = [c.name for c in cursor.description or []]
+    return lambda values: PgRow(zip(names, values))
+
+
+class PgResult:
+    """db.execute() 의 결과. SQLite 커서처럼 fetchone, fetchall, lastrowid 를 쓴다."""
+    def __init__(self, cursor, lastrowid=None):
+        self.cursor = cursor
+        self.lastrowid = lastrowid
+
+    def fetchone(self):
+        return self.cursor.fetchone()
+
+    def fetchall(self):
+        return self.cursor.fetchall()
+
+
+class PgDB:
+    """Postgres 연결을 sqlite3 연결처럼 쓸 수 있게 감싼다.
+    덕분에 아래 화면 코드의 SQL("... WHERE id = ?")은 SQLite 와 똑같이 쓴다."""
+    # 한국 시간(UTC+9). 시간대 이름 대신 +09:00 으로 적어 시간대 자료가 없는 서버에서도 동작한다.
+    SEOUL_NOW = "(to_char(now() AT TIME ZONE INTERVAL '+09:00', 'YYYY-MM-DD HH24:MI:SS'))"
+
+    def __init__(self, url):
+        import psycopg      # 내 컴퓨터(SQLite)에서는 설치하지 않아도 되게 여기서 불러온다
+        # prepare_threshold=None: Neon 의 연결 공유(PgBouncer)와 충돌하지 않게 미리 준비된 문장을 쓰지 않는다
+        self.conn = psycopg.connect(url, row_factory=_pg_row_factory, prepare_threshold=None)
+
+    def execute(self, sql, params=()):
+        sql = sql.replace("?", "%s")
+        if sql.lstrip().upper().startswith("INSERT"):
+            # SQLite 의 cur.lastrowid 대신 새 번호를 돌려받는다
+            cur = self.conn.execute(sql + " RETURNING id", params)
+            return PgResult(cur, cur.fetchone()["id"])
+        return PgResult(self.conn.execute(sql, params))
+
+    def executemany(self, sql, seq):
+        with self.conn.cursor() as cur:
+            cur.executemany(sql.replace("?", "%s"), seq)
+
+    def executescript(self, script):
+        # 표 만드는 SQL 을 Postgres 문법으로 바꿔서 한 문장씩 실행한다
+        script = (script.replace("INTEGER PRIMARY KEY AUTOINCREMENT", "SERIAL PRIMARY KEY")
+                        .replace("(datetime('now', 'localtime'))", self.SEOUL_NOW))
+        for stmt in script.split(";"):
+            if stmt.strip():
+                self.conn.execute(stmt)
+
+    def commit(self):
+        self.conn.commit()
+
+    def close(self):
+        self.conn.close()
+
+
+def connect():
+    """Postgres 주소가 있으면 Postgres, 없으면 SQLite 파일에 연결한다."""
+    if DATABASE_URL:
+        return PgDB(DATABASE_URL)
+    db = sqlite3.connect(DB_PATH)
+    db.row_factory = sqlite3.Row      # 컬럼 이름으로 꺼내 쓰기 위해
+    return db
+
+
 def get_db():
     """요청 한 번에 연결 하나만 쓰도록 g 객체에 담아 둔다."""
     if "db" not in g:
-        g.db = sqlite3.connect(DB_PATH)
-        g.db.row_factory = sqlite3.Row      # 컬럼 이름으로 꺼내 쓰기 위해
+        g.db = connect()
     return g.db
 
 
@@ -57,7 +134,7 @@ def close_db(error):
 
 def init_db():
     """표가 없으면 만들고, 전시할 기타 자료가 비어 있으면 채워 넣는다."""
-    db = sqlite3.connect(DB_PATH)
+    db = connect()
     db.executescript("""
         CREATE TABLE IF NOT EXISTS users (
             id        INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -103,8 +180,11 @@ def init_db():
 
     # 전시 자료는 사용자가 쓰는 데이터가 아니므로 켤 때마다 GUITAR_SEED 내용으로 새로 채운다.
     # (app.py 의 전시 자료를 고치고 다시 실행하면 바로 반영된다. 회원·게시글은 그대로 남는다.)
-    db.execute("DELETE FROM guitars")
-    db.execute("DELETE FROM sqlite_sequence WHERE name = 'guitars'")
+    if DATABASE_URL:
+        db.execute("TRUNCATE guitars RESTART IDENTITY")     # 비우고 번호도 1부터
+    else:
+        db.execute("DELETE FROM guitars")
+        db.execute("DELETE FROM sqlite_sequence WHERE name = 'guitars'")
     db.executemany("""
         INSERT INTO guitars (name, brand, year, category, tagline, image, summary, features, specs)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
